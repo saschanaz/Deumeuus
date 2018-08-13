@@ -4,7 +4,20 @@ import WebAuthenticationBroker = Windows.Security.Authentication.Web.WebAuthenti
 import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthenticationOptions;
 import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
 
+async function getClientTokenMap() {
+  // TODO: instance-tokens map
+}
+
+async function getUserTokens() {
+  // TODO: return list of user tokens, with their instance urls
+}
+
 async function main() {
+  /*
+   * 1. Check user tokens
+   * 2. If exists, activate app with the last used one
+   * 3. If not, receive an instance URL to start with
+   */
   const instance = "https://pawoo.net"
   const redirect = "deumeuus://ana.s.tasia";
   const keys = await registerApp(instance, {
