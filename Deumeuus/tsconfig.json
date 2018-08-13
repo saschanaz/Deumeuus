@@ -9,7 +9,7 @@
     "mapRoot": "js/",
     "sourceRoot": "sources/",
     "emitBOM": true,
-    "module": "commonjs" // remove this line when no need to support Edge 15 mobile
+    "module": "amd" // remove this line when no need to support Edge 15 mobile
   },
   "exclude": [
     "node_modules",

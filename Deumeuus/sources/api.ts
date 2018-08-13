@@ -26,5 +26,5 @@ export async function registerApp(instanceURL: string, args: AppRegistration) {
     method: "POST",
     body: formData
   });
-  return response.json();
+  return response.json() as Promise<ClientInformation>;
 }
