@@ -6,13 +6,13 @@ import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenti
 
 async function main() {
   const instance = "https://pawoo.net"
+  const redirect = "deumeuus://ana.s.tasia";
   const keys = await registerApp(instance, {
     client_name: "deumeuus",
-    redirect_uris: "urn:ietf:wg:oauth:2.0:oob",
+    redirect_uris: redirect,
     scopes: "read write follow"
   });
 
-  const redirect = "intent://oauthresponse";
   const uri = new Windows.Foundation.Uri(instance, `/oauth/authorize?scope=read%20write%20follow&response_type=code&redirect_uri=${encodeURIComponent(redirect)}&client_id=${keys.client_id}`);
 
   const broker = await WebAuthenticationBroker.authenticateAsync(
