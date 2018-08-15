@@ -8,8 +8,8 @@ import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthent
 import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
 
 async function getStartingUser() {
-  const users = await storage.getUserInformationList();
-  if (users && users.length) {
+  const users = (await storage.getUserInformationList()) || [];
+  if (users.length) {
     return users[0];
   }
 
@@ -30,13 +30,21 @@ async function getStartingUser() {
     redirect_uri: redirect
   })
 
-  const user = new MastodonAPI(instance, authToken.access_token);
-  const userCredentials = await user.verifyCredentials();
+  const user = {
+    accessToken: authToken.access_token,
+    instance
+  };
+  users.push(user);
+  await storage.setUserInforamationList(users);
 
-  console.log(userCredentials);
+  return user;
 }
 
 async function main() {
-  await getStartingUser();
+  const user = await getStartingUser();
+
+  const userControl = new MastodonAPI(user.instance, user.accessToken);
+  const credentials = await userControl.verifyCredentials();
+  console.log(credentials);
 }
 main();
