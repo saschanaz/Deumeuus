@@ -70,13 +70,18 @@
     <Content Include="images\StoreLogo.png" />
     <Content Include="images\Wide310x150Logo.scale-200.png" />
     <Content Include="css\default.css" />
+    <Content Include="node_modules\localforage\dist\localforage.min.js" />
     <Content Include="node_modules\requirejs\require.js" />
     <Content Include="tsconfig.json" />
     <None Include="Deumeuus_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="sources\api.ts" />
+    <TypeScriptCompile Include="sources\entities.d.ts" />
+    <TypeScriptCompile Include="sources\oauth2.ts" />
+    <TypeScriptCompile Include="sources\require-config.ts" />
     <TypeScriptCompile Include="sources\main.ts" />
+    <TypeScriptCompile Include="sources\storage.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

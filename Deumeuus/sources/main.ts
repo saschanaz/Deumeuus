@@ -1,23 +1,18 @@
-﻿import { registerApp } from "./api"
+﻿import { registerApp, MastodonAPI } from "./api";
+import { authorizeUser, getUserToken } from "./oauth2";
+import * as storage from "./storage";
 
 import WebAuthenticationBroker = Windows.Security.Authentication.Web.WebAuthenticationBroker;
+import WebAuthenticationResult = Windows.Security.Authentication.Web.WebAuthenticationResult;
 import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthenticationOptions;
 import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
 
-async function getClientTokenMap() {
-  // TODO: instance-tokens map
-}
+async function getStartingUser() {
+  const users = await storage.getUserInformationList();
+  if (users && users.length) {
+    return users[0];
+  }
 
-async function getUserTokens() {
-  // TODO: return list of user tokens, with their instance urls
-}
-
-async function main() {
-  /*
-   * 1. Check user tokens
-   * 2. If exists, activate app with the last used one
-   * 3. If not, receive an instance URL to start with
-   */
   const instance = "https://pawoo.net"
   const redirect = "deumeuus://ana.s.tasia";
   const keys = await registerApp(instance, {
@@ -26,25 +21,22 @@ async function main() {
     scopes: "read write follow"
   });
 
-  const uri = new Windows.Foundation.Uri(instance, `/oauth/authorize?scope=read%20write%20follow&response_type=code&redirect_uri=${encodeURIComponent(redirect)}&client_id=${keys.client_id}`);
+  const authCode = await authorizeUser(instance, redirect, keys.client_id);
+  const authToken = await getUserToken(instance, {
+    client_id: keys.client_id,
+    client_secret: keys.client_secret,
+    code: authCode,
+    grant_type: "authorization_code",
+    redirect_uri: redirect
+  })
 
-  const broker = await WebAuthenticationBroker.authenticateAsync(
-    WebAuthenticationOptions.none,
-    uri,
-    new Windows.Foundation.Uri(redirect)
-  );
+  const user = new MastodonAPI(instance, authToken.access_token);
+  const userCredentials = await user.verifyCredentials();
 
-  switch (broker.responseStatus) {
-    case WebAuthenticationStatus.errorHttp:
-      await new Windows.UI.Popups.MessageDialog("Network error occured while doing authentication.").showAsync();
-      return;
-    case WebAuthenticationStatus.userCancel:
-      await new Windows.UI.Popups.MessageDialog("You canceled authentication.").showAsync();
-      return;
-    case WebAuthenticationStatus.success:
-      await new Windows.UI.Popups.MessageDialog("Authenticated successfully.").showAsync();
-      console.log(broker.responseData);
-      break;
-  }
+  console.log(userCredentials);
+}
+
+async function main() {
+  await getStartingUser();
 }
 main();

@@ -9,7 +9,11 @@
     "mapRoot": "js/",
     "sourceRoot": "sources/",
     "emitBOM": true,
-    "module": "amd" // remove this line when no need to support Edge 15 mobile
+    "module": "amd", // remove this line when no need to support Edge 15 mobile
+    "baseUrl": ".",
+    "paths": {
+      "node_modules/localforage/dist/*": [ "localforage" ]
+    }
   },
   "exclude": [
     "node_modules",
