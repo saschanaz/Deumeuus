@@ -46,7 +46,5 @@ async function main() {
   const userControl = new MastodonAPI(user.instance, user.accessToken);
   const credentials = await userControl.verifyCredentials();
   console.log(credentials);
-  const timeline = await userControl.timelines.home();
-  console.log(timeline);
 }
 main();

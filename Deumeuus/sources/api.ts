@@ -31,6 +31,9 @@ export async function apiFetch<T>(instance: string, accessToken: string, method:
       "Authorization": `Bearer ${accessToken}`
     }
   });
+  if (response.status === 404) {
+    throw new Error(await response.text());
+  }
   const data = await response.json();
   if (response.ok) {
     return data as T;

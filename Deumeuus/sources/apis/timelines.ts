@@ -24,4 +24,16 @@ export class MastodonTimelinesAPI {
   async home(params?: MastodonTimelineParamaters) {
     return this.fetch("GET", "/api/v1/timelines/home", params) as Promise<Status[]>;
   }
+
+  async public(params?: MastodonTimelineParamaters) {
+    return this.fetch("GET", "/api/v1/timelines/public", params) as Promise<Status[]>;
+  }
+
+  async tag(hashtag: string, params?: MastodonTimelineParamaters) {
+    return this.fetch("GET", `/api/v1/timelines/tag/${hashtag}`, params) as Promise<Status[]>;
+  }
+
+  async list(listId: string, params?: MastodonTimelineParamaters) {
+    return this.fetch("GET", `/api/v1/timelines/list/${listId}`, params) as Promise<Status[]>;
+  }
 }
