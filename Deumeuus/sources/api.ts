@@ -1,4 +1,5 @@
 ﻿import * as entities from "./entities";
+import { MastodonTimelinesAPI } from "./apis/timelines";
 
 export interface UserCredentials extends entities.Account {
   /** Selected preference: Default privacy of new toots*/
@@ -11,25 +12,43 @@ export interface UserCredentials extends entities.Account {
   fields: any[];
 }
 
+function queryMapToString(queryMap: Record<string, any>) {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(queryMap)) {
+    params.append(key, value);
+  }
+  const result = params.toString();
+  if (result) {
+    return `?${result}`;
+  }
+  return "";
+}
+
+export async function apiFetch<T>(instance: string, accessToken: string, method: string, path: string, queryMap: Record<string, any> = {}) {
+  const queries = new URLSearchParams()
+  const response = await fetch(`${instance}/${path}${queryMapToString(queryMap)}`, {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  });
+  const data = await response.json();
+  if (response.ok) {
+    return data as T;
+  }
+  throw new Error((data && data.error) ? `API error: ${data.error}` : "Unknown API error");
+}
+
 export class MastodonAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
-  private async fetch<T>(path: string, options: RequestInit = {}) {
-    const response = await fetch(`${this.instanceURL}/${path}`, {
-      ...options,
-      headers: {
-        "Authorization": `Bearer ${this.userAccessToken}`
-      }
-    });
-    const data = await response.json();
-    if (response.ok) {
-      return data as T;
-    }
-    throw new Error((data && data.error) ? `API error: ${data.error}` : "Unknown API error");
+  timelines = new MastodonTimelinesAPI(this.instanceURL, this.userAccessToken);
+
+  private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
+    return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
   async verifyCredentials() {
-    return this.fetch("/api/v1/accounts/verify_credentials") as Promise<UserCredentials>;
+    return this.fetch("GET", "/api/v1/accounts/verify_credentials") as Promise<UserCredentials>;
   }
 }
 
