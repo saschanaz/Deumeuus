@@ -1,17 +1,12 @@
 ﻿import { apiFetch } from "../api";
 import { Status } from "../entities";
+import { MastodonIDLimiter } from "./common";
 
-export interface MastodonTimelineParamaters {
+export interface MastodonTimelineParameters extends MastodonIDLimiter {
   /** Only return statuses originating from this instance (public and tag timelines only) */
   local?: boolean;
   /** Only return statuses that have media attachments (public and tag timelines only) */
   only_media?: boolean;
-  /** Get a list of timelines with ID less than this value */
-  max_id?: string;
-  /** Get a list of timelines with ID greater than this value */
-  since_id?: string;
-  /** Maximum number of statuses on the requested timeline to get (Default 20, Max 40) */
-  limit?: number;
 }
 
 export class MastodonTimelinesAPI {
@@ -21,19 +16,19 @@ export class MastodonTimelinesAPI {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
-  async home(params?: MastodonTimelineParamaters) {
-    return this.fetch("GET", "/api/v1/timelines/home", params) as Promise<Status[]>;
+  home(params?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", "/api/v1/timelines/home", params);
   }
 
-  async public(params?: MastodonTimelineParamaters) {
-    return this.fetch("GET", "/api/v1/timelines/public", params) as Promise<Status[]>;
+  public(params?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", "/api/v1/timelines/public", params);
   }
 
-  async tag(hashtag: string, params?: MastodonTimelineParamaters) {
-    return this.fetch("GET", `/api/v1/timelines/tag/${hashtag}`, params) as Promise<Status[]>;
+  tag(hashtag: string, params?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", `/api/v1/timelines/tag/${hashtag}`, params);
   }
 
-  async list(listId: string, params?: MastodonTimelineParamaters) {
-    return this.fetch("GET", `/api/v1/timelines/list/${listId}`, params) as Promise<Status[]>;
+  list(listId: string, params?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", `/api/v1/timelines/list/${listId}`, params);
   }
 }

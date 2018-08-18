@@ -1,5 +1,6 @@
 ﻿import * as entities from "./entities";
 import { MastodonTimelinesAPI } from "./apis/timelines";
+import { MastodonStatusesAPI } from "./apis/statuses";
 
 export interface UserCredentials extends entities.Account {
   /** Selected preference: Default privacy of new toots*/
@@ -24,12 +25,23 @@ function queryMapToString(queryMap: Record<string, any>) {
   return "";
 }
 
+function queryMapToFormData(queryMap: Record<string, any>) {
+  const data = new FormData();
+  for (const [key, value] of Object.entries(queryMap)) {
+    data.append(key, value);
+  }
+  return data;
+}
+
 export async function apiFetch<T>(instance: string, accessToken: string, method: string, path: string, queryMap: Record<string, any> = {}) {
-  const queries = new URLSearchParams()
-  const response = await fetch(`${instance}/${path}${queryMapToString(queryMap)}`, {
+  const remote = `${instance}/${path}${method === "GET" ? queryMapToString(queryMap) : ""}`;
+  const body = method !== "GET" ? queryMapToFormData(queryMap) : null;
+  const response = await fetch(remote, {
+    method,
     headers: {
       "Authorization": `Bearer ${accessToken}`
-    }
+    },
+    body
   });
   if (response.status === 404) {
     throw new Error(await response.text());
@@ -44,13 +56,14 @@ export async function apiFetch<T>(instance: string, accessToken: string, method:
 export class MastodonAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
+  statuses = new MastodonStatusesAPI(this.instanceURL, this.userAccessToken);
   timelines = new MastodonTimelinesAPI(this.instanceURL, this.userAccessToken);
 
   private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
-  async verifyCredentials() {
+  verifyCredentials() {
     return this.fetch("GET", "/api/v1/accounts/verify_credentials") as Promise<UserCredentials>;
   }
 }
