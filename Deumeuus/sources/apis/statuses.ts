@@ -53,4 +53,36 @@ export class MastodonStatusesAPI {
   delete(id: string) {
     return this.fetch("DELETE", `/api/v1/statuses/${id}`);
   }
+
+  reblog(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/reblog`);
+  }
+
+  unreblog(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unreblog`);
+  }
+
+  favourite(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/favourite`);
+  }
+
+  unfavourite(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unfavourite`);
+  }
+
+  pin(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/pin`);
+  }
+
+  unpin(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unpin`);
+  }
+
+  mute(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/mute`);
+  }
+
+  unmute(id: string) {
+    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unmute`);
+  }
 }
