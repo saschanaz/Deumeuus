@@ -3,3 +3,8 @@
   touch-action: manipulation;
   */
 }
+
+.flexfill {
+    overflow: hidden;
+    flex: 1;
+}

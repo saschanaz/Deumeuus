@@ -10,10 +10,7 @@
     "sourceRoot": "sources/",
     "emitBOM": true,
     "module": "amd", // remove this line when no need to support Edge 15 mobile
-    "baseUrl": ".",
-    "paths": {
-      "node_modules/localforage/dist/*": [ "localforage" ]
-    }
+    "moduleResolution": "node"
   },
   "exclude": [
     "node_modules",

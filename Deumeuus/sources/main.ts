@@ -1,11 +1,7 @@
 ﻿import { registerApp, MastodonAPI } from "./api";
 import { authorizeUser, getUserToken } from "./oauth2";
 import * as storage from "./storage";
-
-import WebAuthenticationBroker = Windows.Security.Authentication.Web.WebAuthenticationBroker;
-import WebAuthenticationResult = Windows.Security.Authentication.Web.WebAuthenticationResult;
-import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthenticationOptions;
-import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
+import { TootBox } from "./ui/tootbox";
 
 async function getStartingUser() {
   const users = (await storage.getUserInformationList()) || [];
@@ -40,6 +36,13 @@ async function getStartingUser() {
   return user;
 }
 
+async function domReady() {
+  if (document.readyState !== "loading") {
+    return;
+  }
+  return new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve));
+}
+
 async function main() {
   const user = await getStartingUser();
 
@@ -50,5 +53,11 @@ async function main() {
   const same = await userControl.statuses.get(result.id);
   console.log(same);
   await userControl.statuses.delete(same.id);
+
+  await domReady();
+  const tootBox = new TootBox();
+  tootBox.data = result;
+  document.body.appendChild(tootBox);
 }
 main();
+

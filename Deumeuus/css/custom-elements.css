@@ -1,0 +1,120 @@
+﻿deu-tootbox {
+    padding: 10px 5%;
+    animation-name: entrance;
+    animation-duration: .3s;
+    display: flex;
+}
+
+    deu-tootbox:hover { /* TODO: move :hover, .selected to flowitemcontainer */
+        background: rgba(128, 128, 128, 0.3);
+    }
+
+    deu-tootbox deu-tootbox:hover {
+        background: transparent;
+    }
+
+    deu-tootbox.selected {
+        background: rgba(128, 128, 128, 0.5);
+    }
+
+        deu-tootbox.selected:hover {
+            background: rgba(128, 128, 128, 0.7);
+        }
+
+    deu-tootbox.deleted {
+        filter: opacity(.2); /* opacity: 0.2; Use filter not to collide with the use of entrance effect */
+    }
+
+.tootbox-inheritcolor {
+    color: inherit;
+}
+
+.tootbox-usercontent {
+    display: flex;
+}
+
+.tootbox-replyindicator {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-right: 8px solid gray;
+    border-bottom: 10px solid transparent;
+    margin-top: 19px; /* 4px + (50px - 20px) / 2 */
+    margin-right: 6px;
+}
+
+.tootbox-videoindicator {
+    width: 0px;
+    height: 0px;
+    border-top: 25px solid transparent;
+    border-left: 43px solid gray;
+    border-bottom: 25px solid transparent;
+}
+
+.tootbox-userimage {
+    width: 48px;
+    height: 48px;
+    margin-top: 4px;
+    margin-right: 6px;
+    box-sizing: border-box;
+}
+
+.tootbox-topwrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.tootbox-usernamewrapper {
+    font-size: 1.2em;
+    overflow: hidden;
+    display: flex;
+}
+
+.tootbox-screenname {
+    margin-left: 0.3em;
+    flex: 1;
+}
+
+.tootbox-timestamp {
+    margin-left: 0.5em;
+    white-space: nowrap;
+}
+
+.tootbox-text {
+    max-height: 300px; /* experimental, to prevent super-tall toots from ruling them all */
+    overflow-y: auto;
+    -ms-overflow-style: scrollbar;
+}
+
+.tootbox-subcontent {
+    display: flex;
+    margin-top: 7px;
+}
+
+    .tootbox-subcontent > deu-tootbox {
+        padding: 0;
+        flex: 1;
+        overflow: hidden;
+    }
+
+.tootbox-usernamewrapper.tootbox-mini {
+    font-size: 1em;
+}
+
+.tootbox-timestamp.tootbox-mini {
+    font-size: .8em;
+}
+
+.tootbox-userimage.tootbox-mini {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+}
+
+.tootbox-subcontent-titlebox {
+    padding: 3px 3px 10px 3px;
+    margin-right: 7px;
+    font-size: 10px;
+    color: #dedede;
+}
