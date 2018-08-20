@@ -48,10 +48,8 @@ async function main() {
 
   const userControl = new MastodonAPI(user.instance, user.accessToken);
   const credentials = await userControl.verifyCredentials();
-  console.log(credentials);
   const result = await userControl.statuses.post({ status: "hello world" });
   const same = await userControl.statuses.get(result.id);
-  console.log(same);
   await userControl.statuses.delete(same.id);
 
   await domReady();
@@ -60,4 +58,3 @@ async function main() {
   document.body.appendChild(tootBox);
 }
 main();
-
