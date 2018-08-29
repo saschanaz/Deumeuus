@@ -18,7 +18,7 @@ interface TootInternalStates {
   } | null;
 }
 
-export class TootBox extends HTMLElement {
+export default class TootBox extends HTMLElement {
   private _states: TootInternalStates = {
     data: null,
     createdAt: null,
@@ -48,9 +48,13 @@ export class TootBox extends HTMLElement {
     return this._states.createdAt;
   }
 
-  constructor() {
+  constructor(data?: Status) {
     super();
     this._setInitialDOM();
+
+    if (data) {
+      this.data = data;
+    }
   }
 
   private _setInitialDOM() {

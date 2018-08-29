@@ -13,6 +13,7 @@
     "@webcomponents/custom-elements": "^1.2.0",
     "domliner": "^1.2.9",
     "localforage": "^1.7.2",
-    "requirejs": "^2.3.5"
+    "requirejs": "^2.3.5",
+    "scroll-agnostic-timeline": "^1.0.0"
   }
 }
