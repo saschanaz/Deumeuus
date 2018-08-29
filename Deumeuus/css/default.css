@@ -1,7 +1,6 @@
 ﻿body {
-  /* Uncomment this to enable scrolling and zooming
-  touch-action: manipulation;
-  */
+  background-color: #1a1a1a;
+  color: white;
 }
 
 .flexfill {

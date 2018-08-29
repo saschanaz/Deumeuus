@@ -118,3 +118,11 @@
     font-size: 10px;
     color: #dedede;
 }
+
+sa-timeline {
+    display: block;
+}
+
+deu-screen sa-timeline {
+    max-width: 500px;
+}
