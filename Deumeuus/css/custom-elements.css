@@ -151,23 +151,27 @@ deu-screen {
     height: 100%;
 }
 
-deu-flow .flow-hole {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: darkgrey;
+deu-flow {
+    display: block;
 }
 
-    deu-flow .flow-hole:hover {
-        background-color: grey;
+    deu-flow .flow-hole {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: darkgrey;
     }
 
-    deu-flow .flow-hole:active {
-        border: 1px solid lightgrey;
-    }
+        deu-flow .flow-hole:hover {
+            background-color: grey;
+        }
 
-deu-flow:not([hashole]) .flow-hole:first-child,
-deu-flow:not(:last-child) .flow-hole:last-child,
-deu-flow[lastitem] .flow-hole:last-child {
-    display: none;
-}
+        deu-flow .flow-hole:active {
+            border: 1px solid lightgrey;
+        }
+
+    deu-flow:not([hashole]) .flow-hole:first-child,
+    deu-flow:not(:last-child) .flow-hole:last-child,
+    deu-flow[lastitem] .flow-hole:last-child {
+        display: none;
+    }

@@ -14,3 +14,10 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.textwrap {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-x: hidden;
+}

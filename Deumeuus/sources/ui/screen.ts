@@ -47,6 +47,7 @@ export class DeumeuusScreen extends HTMLElement {
   private _initializeDOM() {
     const elements = this._states.elements = {} as any;
     const timeline = elements.timeline = new ScrollAgnosticTimeline<Flow<TootBox>>();
+    timeline.max = 100;
     timeline.compare = (x, y) => {
       const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
       if (lengthDiff) {
