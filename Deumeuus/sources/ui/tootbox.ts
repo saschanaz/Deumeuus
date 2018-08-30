@@ -50,14 +50,14 @@ export default class TootBox extends HTMLElement {
 
   constructor(data?: Status) {
     super();
-    this._setInitialDOM();
+    this._initializeDOM();
 
     if (data) {
       this.data = data;
     }
   }
 
-  private _setInitialDOM() {
+  private _initializeDOM() {
     const elements = this._states.elements = ({} as TootInternalStates["elements"])!;
     this.appendChild(element("div", { class: "flexfill" }, [
       element("div", { class: "tootbox-usercontent" }, [

@@ -39,10 +39,10 @@ export class DeumeuusScreen extends HTMLElement {
 
   constructor() {
     super();
-    this._setInitialDOM();
+    this._initializeDOM();
   }
 
-  private _setInitialDOM() {
+  private _initializeDOM() {
     const elements = this._states.elements = {} as any;
     const timeline = elements.timeline = new ScrollAgnosticTimeline<TootBox>();
     timeline.compare = (x, y) => {
