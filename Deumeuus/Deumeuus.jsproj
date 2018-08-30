@@ -93,6 +93,7 @@
     <TypeScriptCompile Include="sources\storage.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />
+    <TypeScriptCompile Include="sources\ui\flow.ts" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Files.resjson" />

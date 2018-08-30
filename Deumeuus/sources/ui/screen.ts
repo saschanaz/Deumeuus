@@ -1,6 +1,7 @@
 ﻿import { MastodonAPI } from "../api";
 import ScrollAgnosticTimeline from "scroll-agnostic-timeline";
 import TootBox from "./tootbox";
+import Flow from "./flow";
 
 /*
  * TODO:
@@ -15,7 +16,7 @@ interface DeumeuusScreenInternalStates {
   user: MastodonAPI | null;
 
   elements: {
-    timeline: ScrollAgnosticTimeline<TootBox>;
+    timeline: ScrollAgnosticTimeline<Flow<TootBox>>;
   } | null;
 }
 
@@ -44,13 +45,13 @@ export class DeumeuusScreen extends HTMLElement {
 
   private _initializeDOM() {
     const elements = this._states.elements = {} as any;
-    const timeline = elements.timeline = new ScrollAgnosticTimeline<TootBox>();
+    const timeline = elements.timeline = new ScrollAgnosticTimeline<Flow<TootBox>>();
     timeline.compare = (x, y) => {
-      const lengthDiff = y.data!.id.length - x.data!.id.length;
+      const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
       if (lengthDiff) {
         return lengthDiff;
       }
-      return y.data!.id.localeCompare(x.data!.id);
+      return y.content!.data!.id.localeCompare(x.content!.data!.id);
     }
     this.appendChild(timeline as HTMLElement);
   }
@@ -61,7 +62,7 @@ export class DeumeuusScreen extends HTMLElement {
     }
     const toots = await this._states.user.timelines.home();
     toots
-      .map(toot => new TootBox(toot))
+      .map(toot => new Flow(new TootBox(toot)))
       .forEach(box => this._states.elements!.timeline.appendChild(box));
   }
 
