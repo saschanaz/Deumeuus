@@ -1,5 +1,5 @@
 ﻿import { MastodonAPI } from "../api";
-import ScrollAgnosticTimeline from "scroll-agnostic-timeline";
+import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-timeline";
 import TootBox from "./tootbox";
 import Flow from "./flow";
 import { MastodonIDLimiter } from "../apis/common";
@@ -59,8 +59,8 @@ export class DeumeuusScreen extends HTMLElement {
       if (ev.target instanceof Element) {
         if (ev.target.classList.contains("flow-hole")) {
           const parent = ev.target.parentElement! as Flow<TootBox>;
-          // TODO: process hole-pre
           if (!ev.target.previousElementSibling) {
+            parent.removeAttribute("hashole");
             await this._retriveHomeTimeline({ since_id: parent.content!.data!.id });
           }
           else if (!ev.target.nextElementSibling) {
@@ -69,6 +69,11 @@ export class DeumeuusScreen extends HTMLElement {
         }
       }
     });
+    timeline.addEventListener("beforeautoremove", ((ev: BeforeAutoRemoveEvent<Flow<TootBox>>) => {
+      if (ev.oldChild.nextElementSibling) {
+        ev.oldChild.nextElementSibling.setAttribute("hashole", "");
+      }
+    }) as EventListener)
     this.appendChild(timeline as HTMLElement);
   }
 
