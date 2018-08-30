@@ -2,6 +2,7 @@
 import ScrollAgnosticTimeline from "scroll-agnostic-timeline";
 import TootBox from "./tootbox";
 import Flow from "./flow";
+import { MastodonIDLimiter } from "../apis/common";
 
 /*
  * TODO:
@@ -34,7 +35,7 @@ export class DeumeuusScreen extends HTMLElement {
 
     // if element is in dom tree, start retrieving toots
     if (document.body.contains(this)) {
-      this._retriveToots();
+      this._retriveHomeTimeline();
     }
   }
 
@@ -53,14 +54,28 @@ export class DeumeuusScreen extends HTMLElement {
       }
       return y.content!.data!.id.localeCompare(x.content!.data!.id);
     }
+    timeline.addEventListener("click", async ev => {
+      if (ev.target instanceof Element) {
+        if (ev.target.classList.contains("flow-hole")) {
+          const parent = ev.target.parentElement! as Flow<TootBox>;
+          // TODO: process hole-pre
+          if (!ev.target.previousElementSibling) {
+            await this._retriveHomeTimeline({ since_id: parent.content!.data!.id });
+          }
+          else if (!ev.target.nextElementSibling) {
+            await this._retriveHomeTimeline({ max_id: parent.content!.data!.id });
+          }
+        }
+      }
+    });
     this.appendChild(timeline as HTMLElement);
   }
 
-  private async _retriveToots() {
+  private async _retriveHomeTimeline(limiter?: MastodonIDLimiter) {
     if (!this._states.user) {
       throw new Error("No account information to retrieve toots");
     }
-    const toots = await this._states.user.timelines.home();
+    const toots = await this._states.user.timelines.home(limiter);
     toots
       .map(toot => new Flow(new TootBox(toot)))
       .forEach(box => this._states.elements!.timeline.appendChild(box));
@@ -69,7 +84,7 @@ export class DeumeuusScreen extends HTMLElement {
   async connectedCallback() {
     // if the user attribute is set, start retrieving toots
     if (this._states.user) {
-      await this._retriveToots();
+      await this._retriveHomeTimeline();
     }
   }
 
