@@ -34,8 +34,8 @@
 }
 
 .tootbox-replyindicator {
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border-top: 10px solid transparent;
     border-right: 8px solid gray;
     border-bottom: 10px solid transparent;
@@ -44,8 +44,8 @@
 }
 
 .tootbox-videoindicator {
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border-top: 25px solid transparent;
     border-left: 43px solid gray;
     border-bottom: 25px solid transparent;
@@ -87,6 +87,22 @@
     -ms-overflow-style: scrollbar;
 }
 
+    .tootbox-text p {
+        margin: 0 0 16px 0;
+    }
+
+        .tootbox-text p:last-child {
+            margin-bottom: 0;
+        }
+
+    .tootbox-text a {
+        text-decoration: none;
+    }
+
+        .tootbox-text a:hover {
+            text-decoration: underline;
+        }
+
 .tootbox-subcontent {
     display: flex;
     margin-top: 7px;
@@ -124,7 +140,15 @@ sa-timeline {
 }
 
 deu-screen sa-timeline {
+    height: 100%;
     max-width: 500px;
+    overflow: auto;
+}
+
+deu-screen {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 deu-flow .flow-hole {
