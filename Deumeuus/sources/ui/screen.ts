@@ -59,13 +59,15 @@ export class DeumeuusScreen extends HTMLElement {
       if (ev.target instanceof Element) {
         if (ev.target.classList.contains("flow-hole")) {
           const parent = ev.target.parentElement! as Flow<TootBox>;
+          const limiter: MastodonIDLimiter = {};
           if (!ev.target.previousElementSibling) {
             parent.removeAttribute("hashole");
-            await this._retriveHomeTimeline({ since_id: parent.content!.data!.id });
+            limiter.since_id = parent.content!.data!.id;
           }
-          else if (!ev.target.nextElementSibling) {
-            await this._retriveHomeTimeline({ max_id: parent.content!.data!.id });
+          if (!ev.target.nextElementSibling) {
+            limiter.max_id = parent.content!.data!.id;
           }
+          await this._retriveHomeTimeline(limiter);
         }
       }
     });
