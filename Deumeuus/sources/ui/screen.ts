@@ -59,8 +59,8 @@ export class DeumeuusScreen extends HTMLElement {
       if (ev.target instanceof Element) {
         if (ev.target.classList.contains("flow-hole")) {
           const parent = ev.target.parentElement! as Flow<TootBox>;
+          const limit = 20;
           if (!ev.target.previousElementSibling) {
-            const limit = 20;
             const limiter: MastodonIDLimiter = {
               limit,
               since_id: parent.content!.data!.id
@@ -75,7 +75,11 @@ export class DeumeuusScreen extends HTMLElement {
           }
           else if (!ev.target.nextElementSibling) {
             // last-item only thing, so only max_id
-            await this._retriveHomeTimeline({ max_id: parent.content!.data!.id });
+            const toots = await this._retriveHomeTimeline({
+              limit,
+              max_id: parent.content!.data!.id
+            });
+            timeline.classList.toggle("no-procedings", toots.length < limit);
           }
         }
       }
@@ -96,6 +100,7 @@ export class DeumeuusScreen extends HTMLElement {
     toots
       .map(toot => new Flow(new TootBox(toot)))
       .forEach(box => this._states.elements!.timeline.appendChild(box));
+    //this.children[0].setAttribute("hashole", "");
     return toots;
   }
 

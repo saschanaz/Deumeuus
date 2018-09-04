@@ -159,7 +159,9 @@ deu-flow {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: darkgrey;
+        background-color: dimgrey;
+        box-sizing: border-box;
+        height: 30px;
     }
 
         deu-flow .flow-hole:hover {
@@ -170,8 +172,12 @@ deu-flow {
             border: 1px solid lightgrey;
         }
 
-    deu-flow:not([hashole]) .flow-hole:first-child,
-    deu-flow:not(:last-child) .flow-hole:last-child,
-    deu-flow[lastitem] .flow-hole:last-child {
+    deu-flow:not([hashole]):not(:first-child) .flow-hole:first-child,
+    deu-flow:not(:last-child) .flow-hole:last-child {
         display: none;
     }
+
+sa-timeline.no-procedings deu-flow:first-child .flow-hole:first-child,
+sa-timeline.realtime deu-flow:last-child .flow-hole:last-child {
+    display: none;
+}
