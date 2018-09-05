@@ -35,7 +35,7 @@ export class DeumeuusScreen extends HTMLElement {
 
     // if element is in dom tree, start retrieving toots
     if (document.body.contains(this)) {
-      this._retriveHomeTimeline();
+      this._retrieveHomeTimeline();
     }
   }
 
@@ -92,7 +92,7 @@ export class DeumeuusScreen extends HTMLElement {
     this.appendChild(timeline as HTMLElement);
   }
 
-  private async _retriveHomeTimeline(limiter?: MastodonIDLimiter) {
+  private async _retrieveHomeTimeline(limiter?: MastodonIDLimiter) {
     if (!this._states.user) {
       throw new Error("No account information to retrieve toots");
     }
@@ -106,7 +106,7 @@ export class DeumeuusScreen extends HTMLElement {
   async connectedCallback() {
     // if the user attribute is set, start retrieving toots
     if (this._states.user) {
-      await this._retriveHomeTimeline();
+      await this._retrieveHomeTimeline();
     }
   }
 
