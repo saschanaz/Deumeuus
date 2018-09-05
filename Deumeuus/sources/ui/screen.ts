@@ -17,7 +17,7 @@ interface DeumeuusScreenInternalStates {
   user: MastodonAPI | null;
 
   elements: {
-    timeline: ScrollAgnosticTimeline<Flow<TootBox>>;
+    homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
   } | null;
 }
 
@@ -45,8 +45,8 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private _initializeDOM() {
-    const elements = this._states.elements = {} as any;
-    const timeline = elements.timeline = new ScrollAgnosticTimeline<Flow<TootBox>>();
+    const elements = this._states.elements = ({} as DeumeuusScreenInternalStates["elements"])!;
+    const timeline = elements.homeTimeline = new ScrollAgnosticTimeline<Flow<TootBox>>();
     timeline.max = 100;
     timeline.compare = (x, y) => {
       const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
@@ -99,8 +99,7 @@ export class DeumeuusScreen extends HTMLElement {
     const toots = await this._states.user.timelines.home(limiter);
     toots
       .map(toot => new Flow(new TootBox(toot)))
-      .forEach(box => this._states.elements!.timeline.appendChild(box));
-    //this.children[0].setAttribute("hashole", "");
+      .forEach(box => this._states.elements!.homeTimeline.appendChild(box));
     return toots;
   }
 
