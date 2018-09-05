@@ -146,7 +146,7 @@ deu-screen sa-timeline {
 }
 
 deu-screen {
-    display: block;
+    display: flex;
     width: 100%;
     height: 100%;
 }
@@ -177,7 +177,11 @@ deu-flow {
         display: none;
     }
 
-sa-timeline.no-procedings deu-flow:first-child .flow-hole:first-child,
-sa-timeline.realtime deu-flow:last-child .flow-hole:last-child {
+sa-timeline.realtime deu-flow:first-child .flow-hole:first-child,
+sa-timeline.no-procedings deu-flow:last-child .flow-hole:last-child {
     display: none;
+}
+
+deu-notibox {
+    display: block;
 }

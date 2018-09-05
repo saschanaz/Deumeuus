@@ -3,6 +3,7 @@ import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-t
 import TootBox from "./tootbox";
 import Flow from "./flow";
 import { MastodonIDLimiter } from "../apis/common";
+import NotificationBox from "./notificationbox";
 
 /*
  * TODO:
@@ -18,6 +19,7 @@ interface DeumeuusScreenInternalStates {
 
   elements: {
     homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
+    notifications: ScrollAgnosticTimeline<Flow<NotificationBox>>;
   } | null;
 }
 
@@ -35,7 +37,7 @@ export class DeumeuusScreen extends HTMLElement {
 
     // if element is in dom tree, start retrieving toots
     if (document.body.contains(this)) {
-      this._retrieveHomeTimeline();
+      this._retrieveInitial();
     }
   }
 
@@ -46,50 +48,58 @@ export class DeumeuusScreen extends HTMLElement {
 
   private _initializeDOM() {
     const elements = this._states.elements = ({} as DeumeuusScreenInternalStates["elements"])!;
-    const timeline = elements.homeTimeline = new ScrollAgnosticTimeline<Flow<TootBox>>();
-    timeline.max = 100;
-    timeline.compare = (x, y) => {
+    const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
+    const notifications = elements.notifications = new ScrollAgnosticTimeline();
+    timeline.max = notifications.max = 100;
+    timeline.compare = notifications.compare = (x: Flow<TootBox | NotificationBox>, y: Flow<TootBox | NotificationBox>) => {
       const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
       if (lengthDiff) {
         return lengthDiff;
       }
       return y.content!.data!.id.localeCompare(x.content!.data!.id);
     }
-    timeline.addEventListener("click", async ev => {
-      if (ev.target instanceof Element) {
-        if (ev.target.classList.contains("flow-hole")) {
-          const parent = ev.target.parentElement! as Flow<TootBox>;
-          const limit = 20;
-          if (!ev.target.previousElementSibling) {
-            const limiter: MastodonIDLimiter = {
-              limit,
-              since_id: parent.content!.data!.id
-            };
-            if (parent.previousElementSibling instanceof Flow) {
-              limiter.max_id = parent.previousElementSibling.content.data.id;
-            }
-            const toots = await this._retriveHomeTimeline(limiter);
-            if (toots.length < limit) {
-              parent.removeAttribute("hashole");
-            }
+    timeline.addEventListener("click", ev => this._loadTimelineHandler(ev, timeline, this._retrieveHomeTimeline));
+    timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
+    notifications.addEventListener("click", ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications));
+    notifications.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
+    this.appendChild(timeline as HTMLElement);
+    this.appendChild(notifications as HTMLElement);
+  }
+
+  private async _loadTimelineHandler(ev: MouseEvent, timeline: ScrollAgnosticTimeline<any>, loader: (limiter: MastodonIDLimiter) => Promise<any[]>) {
+    if (ev.target instanceof Element) {
+      if (ev.target.classList.contains("flow-hole")) {
+        const parent = ev.target.parentElement! as Flow<any>;
+        const limit = 20;
+        if (!ev.target.previousElementSibling) {
+          const limiter: MastodonIDLimiter = {
+            limit,
+            since_id: parent.content!.data!.id
+          };
+          if (parent.previousElementSibling instanceof Flow) {
+            limiter.max_id = parent.previousElementSibling.content.data.id;
           }
-          else if (!ev.target.nextElementSibling) {
-            // last-item only thing, so only max_id
-            const toots = await this._retriveHomeTimeline({
-              limit,
-              max_id: parent.content!.data!.id
-            });
-            timeline.classList.toggle("no-procedings", toots.length < limit);
+          const toots = await loader.call(this, limiter);
+          if (toots.length < limit) {
+            parent.removeAttribute("hashole");
           }
         }
+        else if (!ev.target.nextElementSibling) {
+          // last-item only thing, so only max_id
+          const toots = await loader.call(this, {
+            limit,
+            max_id: parent.content!.data!.id
+          });
+          timeline.classList.toggle("no-procedings", toots.length < limit);
+        }
       }
-    });
-    timeline.addEventListener("beforeautoremove", ((ev: BeforeAutoRemoveEvent<Flow<TootBox>>) => {
-      if (ev.oldChild.nextElementSibling) {
-        ev.oldChild.nextElementSibling.setAttribute("hashole", "");
-      }
-    }) as EventListener)
-    this.appendChild(timeline as HTMLElement);
+    }
+  }
+
+  private async _beforeAutoRemoveHandler(ev: BeforeAutoRemoveEvent<Flow<TootBox>>) {
+    if (ev.oldChild.nextElementSibling) {
+      ev.oldChild.nextElementSibling.setAttribute("hashole", "");
+    }
   }
 
   private async _retrieveHomeTimeline(limiter?: MastodonIDLimiter) {
@@ -103,10 +113,29 @@ export class DeumeuusScreen extends HTMLElement {
     return toots;
   }
 
+  // TODO: Get full notifications instead of just mentions
+  private async _retrieveNotifications(limiter?: MastodonIDLimiter) {
+    if (!this._states.user) {
+      throw new Error("No account information to retrieve toots");
+    }
+    const notifications = await this._states.user.notifications.getAll({ exclude_types: ["reblog", "favourite", "follow"], ...limiter || {} })
+    notifications
+      .map(notification => new Flow(new NotificationBox(notification)))
+      .forEach(box => this._states.elements!.notifications.appendChild(box));
+    return notifications;
+  }
+
+  private _retrieveInitial() {
+    return Promise.all([
+      this._retrieveHomeTimeline(),
+      this._retrieveNotifications()
+    ]);
+  }
+
   async connectedCallback() {
     // if the user attribute is set, start retrieving toots
     if (this._states.user) {
-      await this._retrieveHomeTimeline();
+      await this._retrieveInitial();
     }
   }
 
