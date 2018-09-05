@@ -16,7 +16,16 @@ export interface UserCredentials extends entities.Account {
 function queryMapToString(queryMap: Record<string, any>) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(queryMap)) {
-    params.append(key, value);
+    if (Array.isArray(value)) {
+      // Mastodon follows Rails convention
+      // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#notes
+      for (const item of value) {
+        params.append(`${key}[]`, item);
+      }
+    }
+    else {
+      params.append(key, value);
+    }
   }
   const result = params.toString();
   if (result) {
