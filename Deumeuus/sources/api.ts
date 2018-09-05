@@ -19,7 +19,7 @@ function queryMapToString(queryMap: Record<string, any>) {
   for (const [key, value] of Object.entries(queryMap)) {
     if (Array.isArray(value)) {
       // Mastodon follows Rails convention
-      // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#notes
+      // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#parameter-types
       for (const item of value) {
         params.append(`${key}[]`, item);
       }
