@@ -1,6 +1,7 @@
 ﻿import * as entities from "./entities";
 import { MastodonTimelinesAPI } from "./apis/timelines";
 import { MastodonStatusesAPI } from "./apis/statuses";
+import { MastodonNotificationsAPI } from "./apis/notifications";
 
 export interface UserCredentials extends entities.Account {
   /** Selected preference: Default privacy of new toots*/
@@ -65,6 +66,7 @@ export async function apiFetch<T>(instance: string, accessToken: string, method:
 export class MastodonAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
+  notifications = new MastodonNotificationsAPI(this.instanceURL, this.userAccessToken);
   statuses = new MastodonStatusesAPI(this.instanceURL, this.userAccessToken);
   timelines = new MastodonTimelinesAPI(this.instanceURL, this.userAccessToken);
 

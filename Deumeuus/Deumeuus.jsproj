@@ -83,6 +83,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="sources\api.ts" />
     <TypeScriptCompile Include="sources\apis\common.ts" />
+    <TypeScriptCompile Include="sources\apis\notifications.ts" />
     <TypeScriptCompile Include="sources\apis\statuses.ts" />
     <TypeScriptCompile Include="sources\apis\timelines.ts" />
     <TypeScriptCompile Include="sources\entities.d.ts" />

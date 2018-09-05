@@ -16,19 +16,19 @@ export class MastodonTimelinesAPI {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
-  home(params?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", "/api/v1/timelines/home", params);
+  home(limiter?: MastodonIDLimiter) {
+    return this.fetch<Status[]>("GET", "/api/v1/timelines/home", limiter);
   }
 
-  public(params?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", "/api/v1/timelines/public", params);
+  public(limiter?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", "/api/v1/timelines/public", limiter);
   }
 
-  tag(hashtag: string, params?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", `/api/v1/timelines/tag/${hashtag}`, params);
+  tag(hashtag: string, limiter?: MastodonTimelineParameters) {
+    return this.fetch<Status[]>("GET", `/api/v1/timelines/tag/${hashtag}`, limiter);
   }
 
-  list(listId: string, params?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", `/api/v1/timelines/list/${listId}`, params);
+  list(listId: string, limiter?: MastodonIDLimiter) {
+    return this.fetch<Status[]>("GET", `/api/v1/timelines/list/${listId}`, limiter);
   }
 }
