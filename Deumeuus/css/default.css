@@ -19,6 +19,11 @@
     display: none;
 }
 
+.selectable {
+    -webkit-user-select: element; /* paradoxically Edge specific */
+    user-select: contain;
+}
+
 .textwrap {
     word-wrap: break-word;
     overflow-wrap: break-word;
