@@ -1,7 +1,6 @@
 ﻿import { registerApp, MastodonAPI } from "./api";
 import { authorizeUser, getUserToken } from "./oauth2";
 import * as storage from "./storage";
-import TootBox from "./ui/tootbox";
 import { DeumeuusScreen } from "./ui/screen";
 
 async function getStartingUser() {
@@ -46,18 +45,11 @@ async function domReady() {
 
 async function main() {
   const user = await getStartingUser();
-
   const userControl = new MastodonAPI(user.instance, user.accessToken);
-  const result = await userControl.statuses.post({ status: "hello world" });
-  const same = await userControl.statuses.get(result.id);
-  await userControl.statuses.delete(same.id);
-
-  await domReady();
-  window.addEventListener("unhandledrejection", ((ev: PromiseRejectionEvent) => {
-    throw new Error(ev.reason);
-  }) as any);
   const screen = new DeumeuusScreen();
   screen.user = userControl;
+
+  await domReady();
   document.body.appendChild(screen);
 }
 main();
