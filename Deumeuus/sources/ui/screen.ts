@@ -4,7 +4,7 @@ import TootBox from "./tootbox";
 import Flow from "./flow";
 import { MastodonIDLimiter } from "../apis/common";
 import NotificationBox from "./notificationbox";
-import { Status } from "../entities";
+import { Status, Notification } from "../entities";
 
 /*
  * TODO:
@@ -148,7 +148,13 @@ export class DeumeuusScreen extends HTMLElement {
       const status = JSON.parse(ev.data) as Status;
       // TODO: separate home timeline statuses and mentions
       this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
-    }) as EventListener)
+    }) as EventListener);
+    source.addEventListener("notification", ((ev: MessageEvent) => {
+      const notification = JSON.parse(ev.data) as Notification;
+      if (notification.type === "mention") {
+        this._states.elements!.notifications.appendChild(new Flow(new NotificationBox(notification)));
+      }
+    }) as EventListener);
   }
 
   private _disconnectStream() {
