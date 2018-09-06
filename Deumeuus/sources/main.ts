@@ -31,7 +31,7 @@ async function getStartingUser() {
     instance
   };
   users.push(user);
-  await storage.setUserInforamationList(users);
+  await storage.setUserInformationList(users);
 
   return user;
 }

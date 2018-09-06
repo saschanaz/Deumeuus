@@ -20,6 +20,6 @@ export async function getUserInformationList() {
   return await localforage.getItem("userInformationList") as UserInformation[] | undefined;
 }
 
-export async function setUserInforamationList(userInformations: UserInformation[]) {
+export async function setUserInformationList(userInformations: UserInformation[]) {
   await localforage.setItem("userInformationList", userInformations);
 }
