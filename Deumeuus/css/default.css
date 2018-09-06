@@ -4,15 +4,19 @@
   font-family: Segoe UI, Yu Gothic UI, sans-serif;
 }
 
+.ellipsiswrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .flexfill {
     overflow: hidden;
     flex: 1;
 }
 
-.ellipsiswrap {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.hidden {
+    display: none;
 }
 
 .textwrap {
@@ -20,8 +24,4 @@
     overflow-wrap: break-word;
     white-space: pre-wrap;
     overflow-x: hidden;
-}
-
-.hidden {
-    display: none;
 }

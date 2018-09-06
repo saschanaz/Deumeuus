@@ -77,8 +77,8 @@ export default class TootBox extends HTMLElement {
           elements.content = element("div", { class: "tootbox-text textwrap selectable" })
         ])
       ]),
-      elements.subcontentContainer = element("div", { class: `tweetbox-subcontent` }, [
-        element("div", { class: "tweetbox-subcontent-titlebox opacity5" }, [
+      elements.subcontentContainer = element("div", { class: `tootbox-subcontent` }, [
+        element("div", { class: "tootbox-subcontent-titlebox opacity5" }, [
           element("div", { class: "vertical-outer" }, [
             elements.subcontentTitle = element("div", { class: "vertical-inner" })
           ])
