@@ -2,6 +2,7 @@
 import { MastodonTimelinesAPI } from "./apis/timelines";
 import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonNotificationsAPI } from "./apis/notifications";
+import { MastodonStreamingAPI } from "./apis/streaming";
 
 export interface UserCredentials extends entities.Account {
   /** Selected preference: Default privacy of new toots*/
@@ -44,7 +45,7 @@ function queryMapToFormData(queryMap: Record<string, any>) {
 }
 
 export async function apiFetch<T>(instance: string, accessToken: string, method: string, path: string, queryMap: Record<string, any> = {}) {
-  const remote = `${instance}/${path}${method === "GET" ? queryMapToString(queryMap) : ""}`;
+  const remote = new URL(`${path}${method === "GET" ? queryMapToString(queryMap) : ""}`, instance).toString();
   const body = method !== "GET" ? queryMapToFormData(queryMap) : null;
   const response = await fetch(remote, {
     method,
@@ -69,6 +70,7 @@ export class MastodonAPI {
   notifications = new MastodonNotificationsAPI(this.instanceURL, this.userAccessToken);
   statuses = new MastodonStatusesAPI(this.instanceURL, this.userAccessToken);
   timelines = new MastodonTimelinesAPI(this.instanceURL, this.userAccessToken);
+  streaming = new MastodonStreamingAPI(this.instanceURL, this.userAccessToken);
 
   private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);

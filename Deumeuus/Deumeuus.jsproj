@@ -73,6 +73,7 @@
     <Content Include="css\default.css" />
     <Content Include="node_modules\%40webcomponents\custom-elements\custom-elements.min.js" />
     <Content Include="node_modules\domliner\lib\domliner.js" />
+    <Content Include="node_modules\event-source-polyfill\src\eventsource.min.js" />
     <Content Include="node_modules\localforage\dist\localforage.min.js" />
     <Content Include="node_modules\requirejs\require.js" />
     <Content Include="node_modules\scroll-agnostic-timeline\lib\index.js" />
@@ -85,6 +86,7 @@
     <TypeScriptCompile Include="sources\apis\common.ts" />
     <TypeScriptCompile Include="sources\apis\notifications.ts" />
     <TypeScriptCompile Include="sources\apis\statuses.ts" />
+    <TypeScriptCompile Include="sources\apis\streaming.ts" />
     <TypeScriptCompile Include="sources\apis\timelines.ts" />
     <TypeScriptCompile Include="sources\entities.d.ts" />
     <TypeScriptCompile Include="sources\oauth2.ts" />
@@ -92,6 +94,7 @@
     <TypeScriptCompile Include="sources\require-config.ts" />
     <TypeScriptCompile Include="sources\main.ts" />
     <TypeScriptCompile Include="sources\storage.ts" />
+    <TypeScriptCompile Include="sources\third-parties.d.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />

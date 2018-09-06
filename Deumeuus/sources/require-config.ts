@@ -4,6 +4,9 @@
     "domliner": [
       "node_modules/domliner/lib/domliner"
     ],
+    "event-source-polyfill": [
+      "node_modules/event-source-polyfill/src/eventsource.min"
+    ],
     "localforage": [
       "node_modules/localforage/dist/localforage.min"
     ],

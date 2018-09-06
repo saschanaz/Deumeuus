@@ -4,6 +4,7 @@ import TootBox from "./tootbox";
 import Flow from "./flow";
 import { MastodonIDLimiter } from "../apis/common";
 import NotificationBox from "./notificationbox";
+import { Status } from "../entities";
 
 /*
  * TODO:
@@ -16,6 +17,7 @@ import NotificationBox from "./notificationbox";
 
 interface DeumeuusScreenInternalStates {
   user: MastodonAPI | null;
+  stream: EventSource | null;
 
   elements: {
     homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
@@ -26,6 +28,7 @@ interface DeumeuusScreenInternalStates {
 export class DeumeuusScreen extends HTMLElement {
   private _states: DeumeuusScreenInternalStates = {
     user: null,
+    stream: null,
 
     elements: null
   };
@@ -116,7 +119,7 @@ export class DeumeuusScreen extends HTMLElement {
   // TODO: Get full notifications instead of just mentions
   private async _retrieveNotifications(limiter?: MastodonIDLimiter) {
     if (!this._states.user) {
-      throw new Error("No account information to retrieve toots");
+      throw new Error("No account information to retrieve notifications");
     }
     const notifications = await this._states.user.notifications.getAll({ exclude_types: ["reblog", "favourite", "follow"], ...limiter || {} })
     notifications
@@ -125,11 +128,36 @@ export class DeumeuusScreen extends HTMLElement {
     return notifications;
   }
 
-  private _retrieveInitial() {
+  private async _retrieveInitial() {
+    await this._retreiveStream();
     return Promise.all([
       this._retrieveHomeTimeline(),
       this._retrieveNotifications()
     ]);
+  }
+
+  // TODO: process notifications
+  private async _retreiveStream() {
+    if (!this._states.user) {
+      throw new Error("No account information to retrieve stream");
+    }
+    const source = this._states.stream = await this._states.user.streaming.user();
+    this._states.elements!.homeTimeline.classList.add("realtime");
+    this._states.elements!.notifications.classList.add("realtime");
+    source.addEventListener("update", ((ev: MessageEvent) => {
+      const status = JSON.parse(ev.data) as Status;
+      // TODO: separate home timeline statuses and mentions
+      this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
+    }) as EventListener)
+  }
+
+  private _disconnectStream() {
+    if (this._states.stream) {
+      this._states.stream.close();
+      this._states.stream = null;
+      this._states.elements!.homeTimeline.classList.remove("realtime");
+      this._states.elements!.notifications.classList.remove("realtime");
+    }
   }
 
   async connectedCallback() {
@@ -140,7 +168,7 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   disconnectedCallback() {
-    // TODO: disconnect any ongoing streams
+    this._disconnectStream();
   }
 }
 customElements.define("sa-timeline", ScrollAgnosticTimeline);
