@@ -12,23 +12,23 @@ export interface MastodonTimelineParameters extends MastodonIDLimiter {
 export class MastodonTimelinesAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
-  private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
+  private _fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
   home(limiter?: MastodonIDLimiter) {
-    return this.fetch<Status[]>("GET", "/api/v1/timelines/home", limiter);
+    return this._fetch<Status[]>("GET", "/api/v1/timelines/home", limiter);
   }
 
   public(limiter?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", "/api/v1/timelines/public", limiter);
+    return this._fetch<Status[]>("GET", "/api/v1/timelines/public", limiter);
   }
 
   tag(hashtag: string, limiter?: MastodonTimelineParameters) {
-    return this.fetch<Status[]>("GET", `/api/v1/timelines/tag/${hashtag}`, limiter);
+    return this._fetch<Status[]>("GET", `/api/v1/timelines/tag/${hashtag}`, limiter);
   }
 
   list(listId: string, limiter?: MastodonIDLimiter) {
-    return this.fetch<Status[]>("GET", `/api/v1/timelines/list/${listId}`, limiter);
+    return this._fetch<Status[]>("GET", `/api/v1/timelines/list/${listId}`, limiter);
   }
 }

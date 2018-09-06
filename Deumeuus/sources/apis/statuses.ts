@@ -22,67 +22,67 @@ export interface MastodonStatusPostParameters {
 export class MastodonStatusesAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
-  private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
+  private _fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
     return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
   }
 
   get(id: string) {
-    return this.fetch<Status>("GET", `/api/v1/statuses/${id}`);
+    return this._fetch<Status>("GET", `/api/v1/statuses/${id}`);
   }
 
   getContext(id: string) {
-    return this.fetch<Status>("GET", `/api/v1/statuses/${id}/context`);
+    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/context`);
   }
 
   getCard(id: string) {
-    return this.fetch<Status>("GET", `/api/v1/statuses/${id}/card`);
+    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/card`);
   }
 
   getRebloggers(id: string, limiter?: MastodonIDLimiter) {
-    return this.fetch<Status>("GET", `/api/v1/statuses/${id}/reblogged_by`, limiter);
+    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/reblogged_by`, limiter);
   }
 
   getFavouriters(id: string, limiter?: MastodonIDLimiter) {
-    return this.fetch<Status>("GET", `/api/v1/statuses/${id}/favourited_by`, limiter);
+    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/favourited_by`, limiter);
   }
 
   post(params: MastodonStatusPostParameters) {
-    return this.fetch<Status>("POST", "/api/v1/statuses", params);
+    return this._fetch<Status>("POST", "/api/v1/statuses", params);
   }
 
   delete(id: string) {
-    return this.fetch("DELETE", `/api/v1/statuses/${id}`);
+    return this._fetch("DELETE", `/api/v1/statuses/${id}`);
   }
 
   reblog(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/reblog`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/reblog`);
   }
 
   unreblog(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unreblog`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/unreblog`);
   }
 
   favourite(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/favourite`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/favourite`);
   }
 
   unfavourite(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unfavourite`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/unfavourite`);
   }
 
   pin(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/pin`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/pin`);
   }
 
   unpin(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unpin`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/unpin`);
   }
 
   mute(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/mute`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/mute`);
   }
 
   unmute(id: string) {
-    return this.fetch<Status>("POST", `/api/v1/statuses/${id}/unmute`);
+    return this._fetch<Status>("POST", `/api/v1/statuses/${id}/unmute`);
   }
 }
