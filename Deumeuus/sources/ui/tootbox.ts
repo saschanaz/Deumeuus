@@ -40,6 +40,7 @@ export default class TootBox extends HTMLElement {
     this._states.elements!.img.src = status.account.avatar;
     this._states.elements!.content.innerHTML = status.content;
     this._states.elements!.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
+    this._states.elements!.timeAnchor.href = status.uri;
     this._states.elements!.displayName.textContent = status.account.display_name
     this._states.elements!.screenName.textContent = `@${status.account.username}`;
   }
