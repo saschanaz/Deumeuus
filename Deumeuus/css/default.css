@@ -19,6 +19,10 @@
     display: none;
 }
 
+.nodecoration {
+    text-decoration: none;
+}
+
 .selectable {
     -webkit-user-select: element; /* paradoxically Edge specific */
     user-select: contain;
