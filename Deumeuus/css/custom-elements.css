@@ -177,7 +177,7 @@ deu-flow {
         display: none;
     }
 
-sa-timeline.realtime deu-flow:first-child .flow-hole:first-child,
+sa-timeline.realtime deu-flow:not([hashole]):first-child .flow-hole:first-child,
 sa-timeline.no-procedings deu-flow:last-child .flow-hole:last-child {
     display: none;
 }
