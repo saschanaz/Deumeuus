@@ -146,7 +146,6 @@ export class DeumeuusScreen extends HTMLElement {
     this._states.elements!.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      // TODO: separate home timeline statuses and mentions
       this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {

@@ -2,6 +2,7 @@
 import { authorizeUser, getUserToken } from "./oauth2";
 import * as storage from "./storage";
 import { DeumeuusScreen } from "./ui/screen";
+import startSelectionCanceller from "./selection-canceller";
 
 async function getStartingUser() {
   const users = (await storage.getUserInformationList()) || [];
@@ -41,25 +42,6 @@ async function domReady() {
     return;
   }
   return new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve));
-}
-
-function startSelectionCanceller() {
-  let potentialSelector = -1;
-  document.body.addEventListener("pointerdown", ev => {
-    const computed = getComputedStyle(ev.target! as Element);
-    const userSelect = computed.userSelect || computed.webkitUserSelect;
-    potentialSelector = userSelect !== "none" ? ev.pointerId : -1;
-  });
-  document.body.addEventListener("pointerup", ev => {
-    if (ev.pointerId === potentialSelector) {
-      return;
-    }
-    const computed = getComputedStyle(ev.target! as Element);
-    const userSelect = computed.userSelect || computed.webkitUserSelect;
-    if (userSelect === "none") {
-      getSelection().empty();
-    }
-  })
 }
 
 async function main() {
