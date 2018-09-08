@@ -3,6 +3,7 @@ import { authorizeUser, getUserToken } from "./oauth2";
 import * as storage from "./storage";
 import { DeumeuusScreen } from "./ui/screen";
 import startSelectionCanceller from "./selection-canceller";
+import runTootBoxTimeRefesher from "./time-updater";
 
 async function getStartingUser() {
   const users = (await storage.getUserInformationList()) || [];
@@ -52,6 +53,7 @@ async function main() {
 
   await domReady();
   startSelectionCanceller();
+  runTootBoxTimeRefesher();
   document.body.appendChild(screen);
 }
 main();

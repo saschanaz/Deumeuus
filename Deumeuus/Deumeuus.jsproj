@@ -96,6 +96,7 @@
     <TypeScriptCompile Include="sources\selection-canceller.ts" />
     <TypeScriptCompile Include="sources\storage.ts" />
     <TypeScriptCompile Include="sources\third-parties.d.ts" />
+    <TypeScriptCompile Include="sources\time-updater.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />

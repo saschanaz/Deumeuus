@@ -96,5 +96,11 @@ export default class TootBox extends HTMLElement {
     this._states.elements!.displayName.textContent = "";
     this._states.elements!.screenName.textContent = "";
   }
+
+  updateTimeText() {
+    if (this._states.data) {
+      this._states.elements!.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
+    }
+  }
 }
 customElements.define("deu-tootbox", TootBox);
