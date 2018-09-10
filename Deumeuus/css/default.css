@@ -16,7 +16,7 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .nodecoration {
@@ -33,4 +33,25 @@
     overflow-wrap: break-word;
     white-space: pre-wrap;
     overflow-x: hidden;
+}
+
+.vertical-inner {
+    display: inline-block;
+    transform: translate(0px, 100%) rotate(-90deg);
+    transform-origin: 0 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1em;
+}
+
+    .vertical-inner::after {
+        content: "";
+        float: left;
+        margin-top: 100%;
+    }
+
+.vertical-outer {
+    width: 1em;
+    display: inline-block;
+    overflow: hidden;
 }

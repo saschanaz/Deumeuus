@@ -7,6 +7,7 @@ interface TootInternalStates {
   createdAt: Date | null;
   elements: {
     img: HTMLImageElement;
+    userNameWrapper: HTMLDivElement;
     displayName: HTMLSpanElement;
     screenName: HTMLSpanElement;
     timeAnchor: HTMLAnchorElement;
@@ -38,11 +39,22 @@ export default class TootBox extends HTMLElement {
     }
 
     this._states.elements!.img.src = status.account.avatar;
-    this._states.elements!.content.innerHTML = status.content;
     this._states.elements!.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
     this._states.elements!.timeAnchor.href = status.uri;
     this._states.elements!.displayName.textContent = status.account.display_name
     this._states.elements!.screenName.textContent = `@${status.account.username}`;
+
+    this._states.elements!.subcontentContainer.classList.toggle("hidden", !status.reblog);
+    this._states.elements!.img.classList.toggle("tootbox-mini", !!status.reblog);
+    this._states.elements!.timeAnchor.classList.toggle("tootbox-mini", !!status.reblog);
+    this._states.elements!.userNameWrapper.classList.toggle("tootbox-mini", !!status.reblog);
+    if (status.reblog) {
+      this._states.elements!.subcontentTitle.textContent = "boost";
+      this._states.elements!.subcontent.appendChild(new TootBox(status.reblog));
+    }
+    else {
+      this._states.elements!.content.innerHTML = status.content;
+    }
   }
 
   get createdAt() {
@@ -65,7 +77,7 @@ export default class TootBox extends HTMLElement {
         elements.img = element("img", { class: "tootbox-userimage indicateclickable noselect" }),
         element("div", { class: "flexfill" }, [
           element("div", { class: "tootbox-topwrapper" }, [
-            element("div", { class: `tootbox-usernamewrapper` }, [
+            elements.userNameWrapper = element("div", { class: `tootbox-usernamewrapper` }, [
               elements.displayName = element("span", { class: "ellipsiswrap" }),
               elements.screenName = element("span", { class: "tootbox-screenname ellipsiswrap opacity5" })
             ]),
@@ -78,7 +90,7 @@ export default class TootBox extends HTMLElement {
           elements.content = element("div", { class: "tootbox-text textwrap selectable" })
         ])
       ]),
-      elements.subcontentContainer = element("div", { class: `tootbox-subcontent` }, [
+      elements.subcontentContainer = element("div", { class: "tootbox-subcontent hidden" }, [
         element("div", { class: "tootbox-subcontent-titlebox opacity5" }, [
           element("div", { class: "vertical-outer" }, [
             elements.subcontentTitle = element("div", { class: "vertical-inner" })
@@ -95,6 +107,12 @@ export default class TootBox extends HTMLElement {
     this._states.elements!.timeAnchor.textContent = "";
     this._states.elements!.displayName.textContent = "";
     this._states.elements!.screenName.textContent = "";
+    this._states.elements!.subcontent.innerHTML = "";
+    this._states.elements!.subcontentTitle.textContent = "";
+    this._states.elements!.subcontentContainer.classList.add("hidden");
+    this._states.elements!.img.classList.remove("tootbox-mini");
+    this._states.elements!.timeAnchor.classList.remove("tootbox-mini");
+    this._states.elements!.userNameWrapper.classList.remove("tootbox-mini");
   }
 
   updateTimeText() {
