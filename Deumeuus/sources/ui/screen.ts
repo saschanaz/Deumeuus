@@ -61,6 +61,7 @@ export class DeumeuusScreen extends HTMLElement {
       }
       return y.content!.data!.id.localeCompare(x.content!.data!.id);
     }
+    timeline.identify = x => x.content!.data!.id;
     timeline.addEventListener("click", ev => this._loadTimelineHandler(ev, timeline, this._retrieveHomeTimeline));
     timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
     notifications.addEventListener("click", ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications));
@@ -152,6 +153,14 @@ export class DeumeuusScreen extends HTMLElement {
       const notification = JSON.parse(ev.data) as Notification;
       if (notification.type === "mention") {
         this._states.elements!.notifications.appendChild(new Flow(new NotificationBox(notification)));
+      }
+    }) as EventListener);
+    source.addEventListener("delete", ((ev: MessageEvent) => {
+      const id = ev.data as string;
+      // TODO: remove from notifications
+      const child = this._states.elements!.homeTimeline.find(id);
+      if (child) {
+        child.content!.classList.add("deleted");
       }
     }) as EventListener);
   }

@@ -15,6 +15,6 @@
     "event-source-polyfill": "github:saschanaz/EventSource#umd",
     "localforage": "^1.7.2",
     "requirejs": "^2.3.5",
-    "scroll-agnostic-timeline": "^1.1.1"
+    "scroll-agnostic-timeline": "^1.2.0"
   }
 }
