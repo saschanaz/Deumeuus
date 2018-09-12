@@ -1,4 +1,5 @@
 ﻿import TootBox from "./ui/tootbox";
+import { iterate } from "./iterate";
 
 export default function runTootBoxTimeRefesher(interval = 30000) {
   return setInterval(() => {
@@ -7,13 +8,4 @@ export default function runTootBoxTimeRefesher(interval = 30000) {
       tootbox.updateTimeText();
     }
   }, interval);
-}
-
-function* iterate<T extends Element>(iterable: HTMLCollectionOf<T>) {
-  if (HTMLCollection.prototype[Symbol.iterator]) {
-    yield* iterable[Symbol.iterator]();
-  }
-  for (let i = 0; i < iterable.length; i++) {
-    yield iterable[i];
-  }
 }
