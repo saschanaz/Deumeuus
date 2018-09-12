@@ -72,6 +72,8 @@
     <Content Include="images\Wide310x150Logo.scale-200.png" />
     <Content Include="css\default.css" />
     <Content Include="node_modules\%40webcomponents\custom-elements\custom-elements.min.js" />
+    <Content Include="node_modules\dialog-polyfill\dialog-polyfill.css" />
+    <Content Include="node_modules\dialog-polyfill\dialog-polyfill.js" />
     <Content Include="node_modules\domliner\lib\domliner.js" />
     <Content Include="node_modules\event-source-polyfill\src\eventsource.min.js" />
     <Content Include="node_modules\localforage\dist\localforage.min.js" />
@@ -88,6 +90,7 @@
     <TypeScriptCompile Include="sources\apis\statuses.ts" />
     <TypeScriptCompile Include="sources\apis\streaming.ts" />
     <TypeScriptCompile Include="sources\apis\timelines.ts" />
+    <TypeScriptCompile Include="sources\dialog-polyfill-auto.ts" />
     <TypeScriptCompile Include="sources\entities.d.ts" />
     <TypeScriptCompile Include="sources\oauth2.ts" />
     <TypeScriptCompile Include="sources\relative-time.ts" />

@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@webcomponents/custom-elements": "^1.2.0",
+    "dialog-polyfill": "^0.4.10",
     "domliner": "^1.2.9",
     "event-source-polyfill": "github:saschanaz/EventSource#umd",
     "localforage": "^1.7.2",

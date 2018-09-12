@@ -1,6 +1,9 @@
 ﻿var require = {
   baseUrl: ".",
   paths: {
+    "dialog-polyfill": [
+      "node_modules/dialog-polyfill/dialog-polyfill"
+    ],
     "domliner": [
       "node_modules/domliner/lib/domliner"
     ],

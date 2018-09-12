@@ -7,3 +7,7 @@
     constructor(url: string, eventSourceInitDict?: EventSourcePolyfillInit);
   }
 }
+
+declare module "dialog-polyfill" {
+  export function registerDialog(dialog: HTMLUnknownElement | HTMLDialogElement): void;
+}
