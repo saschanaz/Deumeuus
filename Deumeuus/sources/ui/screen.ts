@@ -130,7 +130,7 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private async _retrieveInitial() {
-    await this._retreiveStream();
+    await this._retrieveStream();
     return Promise.all([
       this._retrieveHomeTimeline(),
       this._retrieveNotifications()
@@ -138,7 +138,7 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   // TODO: process notifications
-  private async _retreiveStream() {
+  private async _retrieveStream() {
     if (!this._states.user) {
       throw new Error("No account information to retrieve stream");
     }
