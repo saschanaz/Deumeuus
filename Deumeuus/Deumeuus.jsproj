@@ -105,6 +105,7 @@
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />
     <TypeScriptCompile Include="sources\ui\flow.ts" />
+    <TypeScriptCompile Include="sources\ui\writer.ts" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Files.resjson" />
