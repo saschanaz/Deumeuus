@@ -1,0 +1,52 @@
+﻿deu-writer {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(20, 20, 20, 0.5);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.writer-remaininglengthindicator.exceeded {
+    color: red;
+}
+
+.writer-contentarea {
+    display: flex;
+    flex: 1;
+    min-height: 0px; /* not to just expand as its children grows */
+}
+
+.writer-textarea {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    color: white;
+    flex: 1;
+    min-width: 0px;
+}
+
+    .writer-textarea::-ms-input-placeholder {
+        color: #C0C0C0;
+    }
+
+    .writer-textarea::placeholder { /* Future standard: http://drafts.csswg.org/css-pseudo-4/#placeholder-pseudo */
+        color: #C0C0C0;
+    }
+
+.writer-mediaindicator {
+    min-width: 70px;
+    overflow-y: auto;
+}
+
+.writer-mediaindicator-thumbnail {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    color: rgba(128, 128, 128, .7);
+    font-size: 30px;
+}
+
+.writer-tools {
+    display: flex;
+    justify-content: space-between;
+}

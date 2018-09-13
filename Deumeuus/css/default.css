@@ -3,6 +3,7 @@
 @import "customelements/timeline.css";
 @import "customelements/screen.css";
 @import "customelements/notibox.css";
+@import "customelements/writer.css";
 
 body {
   background-color: #1a1a1a;
