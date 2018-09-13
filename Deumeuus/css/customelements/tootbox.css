@@ -108,10 +108,13 @@
     margin-top: 7px;
 }
 
-    .tootbox-subcontent deu-tootbox {
-        padding: 0;
+    .tootbox-subcontent > :last-child {
         flex: 1;
         overflow: hidden;
+    }
+
+    .tootbox-subcontent deu-tootbox {
+        padding: 0;
     }
 
 .tootbox-usernamewrapper.tootbox-mini {
