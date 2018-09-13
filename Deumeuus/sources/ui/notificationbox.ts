@@ -29,7 +29,7 @@ export default class NotificationBox extends HTMLElement {
       return;
     }
 
-    this._states.elements!.status.classList.toggle("hidden", !notification.status);
+    this._states.elements!.status.classList.toggle("invisible", !notification.status);
     this._states.elements!.status.data = notification.status;
   }
 
@@ -49,7 +49,7 @@ export default class NotificationBox extends HTMLElement {
   private _initializeDOM() {
     const elements = this._states.elements = ({} as NotificationInternalStates["elements"])!;
     this.appendChild(
-      elements.status = element(new TootBox(), { class: "hidden" })
+      elements.status = element(new TootBox(), { class: "invisible" })
     );
   }
 
