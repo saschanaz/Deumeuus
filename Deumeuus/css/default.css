@@ -26,6 +26,10 @@ body {
     display: none !important;
 }
 
+.ellipsis::after {
+    content: "...";
+}
+
 .nodecoration {
     text-decoration: none;
 }
