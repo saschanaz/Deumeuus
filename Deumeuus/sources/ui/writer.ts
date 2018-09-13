@@ -1,4 +1,4 @@
-﻿import { element } from "../../node_modules/domliner";
+﻿import { element } from "domliner";
 import { MastodonAPI } from "../api";
 import { MastodonStatusPostParameters } from "../apis/statuses";
 import { iterate } from "../iterate";
@@ -37,7 +37,7 @@ export class Writer extends HTMLElement {
   }
 
   private _initializeDOM() {
-    const internal = this._states;
+    const elements = this._states.elements = ({} as WriterInternalStates["elements"])!;
     this.appendChild(element("div", { class: "writer sticky-bottom" }, [
       element("div", { class: "writer-tools writer-tools-top" }, [
         element("input", { type: "button", class: "transparentbutton indicateclickable", value: "X" /* TODO: AccountSelector */ }),
@@ -45,36 +45,36 @@ export class Writer extends HTMLElement {
         element("input", { type: "button", class: "transparentbutton indicateclickable", value: "L" /* location */ }),
         element("input", { type: "button", class: "transparentbutton indicateclickable", value: "F" /* folder */ }),
       ]),
-      internal.elements!.remainingLengthIndicator = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
-      internal.elements!.contentarea = element("div", { class: "writer-contentarea" }, [
-        internal.elements!.textarea = element("textarea", {
+      elements.remainingLengthIndicator = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
+      elements.contentarea = element("div", { class: "writer-contentarea" }, [
+        elements.textarea = element("textarea", {
           class: "writer-textarea", placeholder: "Write here", spellcheck: false
         })
       ]),
       element("div", { class: "writer-tools writer-tools-bottom" }, [
-        internal.elements!.clearButton = element("input", {
+        elements.clearButton = element("input", {
           type: "button", class: "transparentbutton indicateclickable palettedream", value: "\ue808" /* trash can */
         }),
-        internal.elements!.attachMediaButton = element("input", {
+        elements.attachMediaButton = element("input", {
           type: "button", class: "transparentbutton indicateclickable palettedream", value: "\ue836" /* picture frame */
         }),
         element("input", { type: "button", class: "transparentbutton indicateclickable", value: "Ment" }),
-        internal.elements!.writeButton = element("input", {
+        elements.writeButton = element("input", {
           type: "button", class: "opaquebutton indicateclickable backgroundaccent palettedream", value: "\ue830" /* quill */, disabled: "disabled"
         })
       ])
     ]));
 
-    internal.elements!.textarea.addEventListener("keydown", ev => {
+    elements.textarea.addEventListener("keydown", ev => {
       /* no keyup but keydown to prevent confusion with composition canceling on Japanese IME */
       if (ev.key === "Enter" && ev.ctrlKey) {
         this._writeAction();
       }
     });
-    internal.elements!.textarea.addEventListener("input", () => this._applyInputTextStatus());
+    elements.textarea.addEventListener("input", () => this._applyInputTextStatus());
 
-    internal.elements!.clearButton.addEventListener("click", () => this.clear());
-    internal.elements!.writeButton.addEventListener("click", () => this._writeAction())
+    elements.clearButton.addEventListener("click", () => this.clear());
+    elements.writeButton.addEventListener("click", () => this._writeAction())
   }
 
   focusToTextArea() {
@@ -145,3 +145,4 @@ export class Writer extends HTMLElement {
     internal.elements!.textarea.focus();
   }
 }
+customElements.define("deu-writer", Writer);
