@@ -61,7 +61,11 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="css\custom-elements.css" />
+    <Content Include="css\customelements\flow.css" />
+    <Content Include="css\customelements\notibox.css" />
+    <Content Include="css\customelements\timeline.css" />
+    <Content Include="css\customelements\screen.css" />
+    <Content Include="css\customelements\tootbox.css" />
     <Content Include="index.html" />
     <Content Include="images\LockScreenLogo.scale-200.png" />
     <Content Include="images\SplashScreen.scale-200.png" />
