@@ -5,6 +5,8 @@ import Flow from "./flow";
 import { MastodonIDLimiter } from "../apis/common";
 import NotificationBox from "./notificationbox";
 import { Status, Notification } from "../entities";
+import { Writer } from "./writer";
+import createDialogAutoPolyfill from "../dialog-polyfill-auto";
 
 /*
  * TODO:
@@ -22,6 +24,8 @@ interface DeumeuusScreenInternalStates {
   elements: {
     homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
     notifications: ScrollAgnosticTimeline<Flow<NotificationBox>>;
+    writerDialog: HTMLDialogElement;
+    writer: Writer;
   } | null;
 }
 
@@ -37,6 +41,7 @@ export class DeumeuusScreen extends HTMLElement {
   }
   set user(account: MastodonAPI | null) {
     this._states.user = account;
+    this._states.elements!.writer.user = account;
 
     // if element is in dom tree, start retrieving toots
     if (document.body.contains(this)) {
@@ -50,6 +55,7 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private _initializeDOM() {
+    this.tabIndex = 0;
     const elements = this._states.elements = ({} as DeumeuusScreenInternalStates["elements"])!;
     const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
     const notifications = elements.notifications = new ScrollAgnosticTimeline();
@@ -68,6 +74,16 @@ export class DeumeuusScreen extends HTMLElement {
     notifications.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
     this.appendChild(timeline as HTMLElement);
     this.appendChild(notifications as HTMLElement);
+
+    const writer = elements.writer = new Writer();
+    const dialog = createDialogAutoPolyfill();
+    dialog.appendChild(writer);
+    this.appendChild(dialog);
+    this.addEventListener("keydown", ev => {
+      if (ev.ctrlKey && ev.key === "n") {
+        dialog.showModal();
+      }
+    })
   }
 
   private async _loadTimelineHandler(ev: MouseEvent, timeline: ScrollAgnosticTimeline<any>, loader: (limiter: MastodonIDLimiter) => Promise<any[]>) {
