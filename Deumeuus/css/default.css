@@ -66,3 +66,5 @@ body {
     display: inline-block;
     overflow: hidden;
 }
+
+*:focus:not(.focus-visible) { outline: none; }

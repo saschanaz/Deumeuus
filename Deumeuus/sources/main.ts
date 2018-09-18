@@ -55,5 +55,10 @@ async function main() {
   startSelectionCanceller();
   runTootBoxTimeRefesher();
   document.body.appendChild(screen);
+  document.body.addEventListener("keydown", ev => {
+    if (ev.ctrlKey && ev.key === "n" && !document.querySelector("dialog[open]")) {
+      screen.openWriterDialog();
+    }
+  });
 }
 main();

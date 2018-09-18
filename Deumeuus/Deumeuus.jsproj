@@ -81,6 +81,7 @@
     <Content Include="node_modules\dialog-polyfill\dialog-polyfill.js" />
     <Content Include="node_modules\domliner\lib\domliner.js" />
     <Content Include="node_modules\event-source-polyfill\src\eventsource.min.js" />
+    <Content Include="node_modules\focus-visible\dist\focus-visible.min.js" />
     <Content Include="node_modules\localforage\dist\localforage.min.js" />
     <Content Include="node_modules\requirejs\require.js" />
     <Content Include="node_modules\scroll-agnostic-timeline\lib\index.js" />
@@ -96,6 +97,7 @@
     <TypeScriptCompile Include="sources\apis\streaming.ts" />
     <TypeScriptCompile Include="sources\apis\timelines.ts" />
     <TypeScriptCompile Include="sources\dialog-polyfill-auto.ts" />
+    <TypeScriptCompile Include="sources\dialog-open.ts" />
     <TypeScriptCompile Include="sources\entities.d.ts" />
     <TypeScriptCompile Include="sources\iterate.ts" />
     <TypeScriptCompile Include="sources\oauth2.ts" />

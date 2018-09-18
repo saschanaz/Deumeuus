@@ -6,7 +6,7 @@ import { MastodonIDLimiter } from "../apis/common";
 import NotificationBox from "./notificationbox";
 import { Status, Notification } from "../entities";
 import { Writer } from "./writer";
-import createDialogAutoPolyfill from "../dialog-polyfill-auto";
+import openDialog from "../dialog-open";
 
 /*
  * TODO:
@@ -55,7 +55,6 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private _initializeDOM() {
-    this.tabIndex = 0;
     const elements = this._states.elements = ({} as DeumeuusScreenInternalStates["elements"])!;
     const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
     const notifications = elements.notifications = new ScrollAgnosticTimeline();
@@ -75,15 +74,11 @@ export class DeumeuusScreen extends HTMLElement {
     this.appendChild(timeline as HTMLElement);
     this.appendChild(notifications as HTMLElement);
 
-    const writer = elements.writer = new Writer();
-    const dialog = createDialogAutoPolyfill();
-    dialog.appendChild(writer);
-    this.appendChild(dialog);
-    this.addEventListener("keydown", ev => {
-      if (ev.ctrlKey && ev.key === "n") {
-        dialog.showModal();
-      }
-    })
+    elements.writer = new Writer();
+  }
+
+  openWriterDialog() {
+    openDialog(this._states.elements!.writer);
   }
 
   private async _loadTimelineHandler(ev: MouseEvent, timeline: ScrollAgnosticTimeline<any>, loader: (limiter: MastodonIDLimiter) => Promise<any[]>) {

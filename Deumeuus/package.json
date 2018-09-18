@@ -14,6 +14,7 @@
     "dialog-polyfill": "^0.4.10",
     "domliner": "^1.2.9",
     "event-source-polyfill": "github:saschanaz/EventSource#umd",
+    "focus-visible": "^4.1.5",
     "localforage": "^1.7.2",
     "requirejs": "^2.3.5",
     "scroll-agnostic-timeline": "^1.2.0"
