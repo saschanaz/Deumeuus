@@ -14,6 +14,7 @@ body {
 dialog {
     color: inherit;
     padding: 0;
+    border: none;
 }
 
 .clickable:hover:not(:disabled) {
@@ -51,6 +52,10 @@ dialog {
     width: 100%;
     max-width: 600px;
     height: 95%;
+
+    /* dynamic size workaround for dialog-polyfill */
+    top: 0px !important;
+    bottom: 0px;
 }
 
 .nobackground {
