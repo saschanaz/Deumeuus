@@ -78,7 +78,10 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   openWriterDialog() {
-    openDialog(this._states.elements!.writer);
+    openDialog({
+      classes: ["limitedwidth"],
+      nodes: [this._states.elements!.writer]
+    });
   }
 
   private async _loadTimelineHandler(ev: MouseEvent, timeline: ScrollAgnosticTimeline<any>, loader: (limiter: MastodonIDLimiter) => Promise<any[]>) {

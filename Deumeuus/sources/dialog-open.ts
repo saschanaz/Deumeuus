@@ -1,9 +1,12 @@
 ﻿import createDialogAutoPolyfill from "./dialog-polyfill-auto";
 
-export default function openDialog(...nodes: Node[]) {
+export default function openDialog({ nodes, classes }: { nodes: Node[], classes: string[] }) {
   const dialog = createDialogAutoPolyfill();
   for (const node of nodes) {
     dialog.appendChild(node);
+  }
+  if (classes) {
+    dialog.classList.add(...classes);
   }
   const previousFocus = document.activeElement;
   const previousFocusVisible = previousFocus.classList.contains("focus-visible");

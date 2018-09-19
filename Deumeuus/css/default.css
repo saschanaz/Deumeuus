@@ -11,6 +11,23 @@ body {
   font-family: Segoe UI, Yu Gothic UI, sans-serif;
 }
 
+dialog {
+    color: inherit;
+    padding: 0;
+}
+
+.clickable:hover:not(:disabled) {
+    filter: brightness(.8);
+}
+
+.clickable:active:not(:disabled) {
+    filter: brightness(.6);
+}
+
+.clickable:disabled {
+    opacity: 0.2;
+}
+
 .ellipsiswrap {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -30,6 +47,16 @@ body {
     content: "...";
 }
 
+.limitedwidth {
+    width: 100%;
+    max-width: 600px;
+    height: 95%;
+}
+
+.nobackground {
+    background-color: transparent;
+}
+
 .nodecoration {
     text-decoration: none;
 }
@@ -39,11 +66,25 @@ body {
     user-select: contain;
 }
 
+.textbutton {
+    border: none;
+    box-sizing: border-box;
+    color: inherit;
+    font-family: "Segoe MDL2 Assets", sans-serif;
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+}
+
 .textwrap {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
     overflow-x: hidden;
+}
+
+.underlineonhover:hover {
+    text-decoration: underline;
 }
 
 .vertical-inner {

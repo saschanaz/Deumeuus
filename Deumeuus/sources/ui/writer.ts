@@ -40,10 +40,10 @@ export class Writer extends HTMLElement {
     const elements = this._states.elements = ({} as WriterInternalStates["elements"])!;
     this.appendChild(element("div", { class: "writer sticky-bottom" }, [
       element("div", { class: "writer-tools writer-tools-top" }, [
-        element("input", { type: "button", class: "transparentbutton indicateclickable", value: "X" /* TODO: AccountSelector */ }),
-        element("input", { type: "button", class: "transparentbutton indicateclickable", value: "@" /* @ */ }),
-        element("input", { type: "button", class: "transparentbutton indicateclickable", value: "L" /* location */ }),
-        element("input", { type: "button", class: "transparentbutton indicateclickable", value: "F" /* folder */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "X" /* TODO: AccountSelector */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "@" /* @ */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "L" /* location */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "F" /* folder */ }),
       ]),
       elements.remainingLengthIndicator = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
       elements.contentarea = element("div", { class: "writer-contentarea" }, [
@@ -53,14 +53,14 @@ export class Writer extends HTMLElement {
       ]),
       element("div", { class: "writer-tools writer-tools-bottom" }, [
         elements.clearButton = element("input", {
-          type: "button", class: "transparentbutton indicateclickable palettedream", value: "\ue808" /* trash can */
+          type: "button", class: "textbutton nobackground clickable", value: "\ue808" /* trash can */
         }),
         elements.attachMediaButton = element("input", {
-          type: "button", class: "transparentbutton indicateclickable palettedream", value: "\ue836" /* picture frame */
+          type: "button", class: "textbutton nobackground clickable", value: "\ue836" /* picture frame */
         }),
-        element("input", { type: "button", class: "transparentbutton indicateclickable", value: "Ment" }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "Ment" }),
         elements.writeButton = element("input", {
-          type: "button", class: "opaquebutton indicateclickable backgroundaccent palettedream", value: "\ue830" /* quill */, disabled: "disabled"
+          type: "button", class: "textbutton clickable backgroundaccent", value: "\ue830" /* quill */, disabled: "disabled"
         })
       ])
     ]));
