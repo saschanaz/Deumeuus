@@ -10,3 +10,14 @@
         overflow: auto;
         flex: 1;
     }
+
+@media (max-width: 800px) {
+    deu-screen {
+        -ms-scroll-snap-points-x: snapInterval(0%, 100%);
+        -ms-scroll-snap-type: mandatory;
+    }
+
+    deu-screen sa-timeline {
+        min-width: 100%;
+    }
+}

@@ -1,5 +1,6 @@
 ﻿deu-flow {
     display: block;
+    margin: 20px 5%;
 }
 
     deu-flow .flow-hole {
@@ -23,3 +24,9 @@
     deu-flow:not(:last-child) .flow-hole:last-child {
         display: none;
     }
+
+@media (max-width: 500px) {
+    deu-flow {
+        margin: 10px 5%;
+    }
+}
