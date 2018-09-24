@@ -7,6 +7,7 @@ import NotificationBox from "./notificationbox";
 import { Status, Notification } from "../entities";
 import { Writer } from "./writer";
 import openDialog from "../dialog-open";
+import { element } from "domliner";
 
 /*
  * TODO:
@@ -22,6 +23,7 @@ interface DeumeuusScreenInternalStates {
   stream: EventSource | null;
 
   elements: {
+    currentUserImage: HTMLImageElement;
     homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
     notifications: ScrollAgnosticTimeline<Flow<NotificationBox>>;
     writerDialog: HTMLDialogElement;
@@ -43,9 +45,16 @@ export class DeumeuusScreen extends HTMLElement {
     this._states.user = account;
     this._states.elements!.writer.user = account;
 
-    // if element is in dom tree, start retrieving toots
-    if (document.body.contains(this)) {
-      this._retrieveInitial();
+    if (account) {
+      if (account && document.body.contains(this)) {
+        this._retrieveInitial();
+      }
+      account.verifyCredentials().then(
+        user => this._states.elements!.currentUserImage.src = user.avatar
+      );
+    }
+    else {
+      this._states.elements!.currentUserImage.src = "";
     }
   }
 
@@ -71,8 +80,19 @@ export class DeumeuusScreen extends HTMLElement {
     timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
     notifications.addEventListener("click", ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications));
     notifications.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
-    this.appendChild(timeline as HTMLElement);
-    this.appendChild(notifications as HTMLElement);
+
+    element(this, undefined, [
+      element("div", { class: "screen-menubar" }, [
+        elements.currentUserImage = element("img", { class: "screen-currentuser" }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE90A" /* MDL2 Comment */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE910" /* MDL2 Accounts */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE713" /* MDL2 Settings */ })
+      ]),
+      element("div", { class: "screen-columns" }, [
+        timeline as HTMLElement,
+        notifications as HTMLElement
+      ])
+    ]);
 
     elements.writer = new Writer();
   }

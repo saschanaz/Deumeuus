@@ -1,15 +1,31 @@
 ﻿deu-screen {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
 }
 
-    deu-screen sa-timeline {
-        height: 100%;
-        max-width: 800px;
-        overflow: auto;
-        flex: 1;
+    deu-screen .screen-menubar {
+        display: flex;
     }
+
+    deu-screen .screen-currentuser {
+        width: 48px;
+        height: 48px;
+    }
+
+    deu-screen .screen-columns {
+        flex: 1;
+        display: flex;
+        overflow-y: hidden;
+    }
+
+        deu-screen .screen-columns > * {
+            height: 100%;
+            max-width: 800px;
+            overflow: auto;
+            flex: 1;
+        }
 
 @media (max-width: 800px) {
     deu-screen {
@@ -17,7 +33,7 @@
         -ms-scroll-snap-type: mandatory;
     }
 
-    deu-screen sa-timeline {
-        min-width: 100%;
-    }
+        deu-screen .screen-columns > * {
+            min-width: 100%;
+        }
 }
