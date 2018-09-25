@@ -4,6 +4,7 @@ import * as storage from "./storage";
 import { DeumeuusScreen } from "./ui/screen";
 import startSelectionCanceller from "./selection-canceller";
 import runTootBoxTimeRefesher from "./time-updater";
+import * as styleController from "./style-controller";
 
 async function getStartingUser() {
   const users = (await storage.getUserInformationList()) || [];
@@ -54,6 +55,8 @@ async function main() {
   await domReady();
   startSelectionCanceller();
   runTootBoxTimeRefesher();
+  document.head.appendChild(styleController.styleElement);
+  styleController.applySavedOrDefaultStyle();
   document.body.appendChild(screen);
   document.body.addEventListener("keydown", ev => {
     if (ev.ctrlKey && ev.key === "n" && !document.querySelector("dialog[open]")) {

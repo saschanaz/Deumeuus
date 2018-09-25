@@ -4,11 +4,10 @@
 @import "customelements/screen.css";
 @import "customelements/notibox.css";
 @import "customelements/writer.css";
+@import "accentcolor.css";
 
 body {
-  background-color: #1a1a1a;
   color: white;
-  font-family: Segoe UI, Yu Gothic UI, sans-serif;
 }
 
 dialog {

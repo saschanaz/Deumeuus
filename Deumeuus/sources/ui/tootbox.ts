@@ -38,22 +38,23 @@ export default class TootBox extends HTMLElement {
       return;
     }
 
-    this._states.elements!.img.src = status.account.avatar;
-    this._states.elements!.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
-    this._states.elements!.timeAnchor.href = status.uri;
-    this._states.elements!.displayName.textContent = status.account.display_name
-    this._states.elements!.screenName.textContent = `@${status.account.username}`;
+    const elements = this._states.elements!;
+    elements.img.src = status.account.avatar;
+    elements.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
+    elements.timeAnchor.href = status.uri;
+    elements.displayName.textContent = status.account.display_name
+    elements.screenName.textContent = `@${status.account.username}`;
 
-    this._states.elements!.subcontentContainer.classList.toggle("invisible", !status.reblog);
-    this._states.elements!.img.classList.toggle("tootbox-mini", !!status.reblog);
-    this._states.elements!.timeAnchor.classList.toggle("tootbox-mini", !!status.reblog);
-    this._states.elements!.userNameWrapper.classList.toggle("tootbox-mini", !!status.reblog);
+    elements.subcontentContainer.classList.toggle("invisible", !status.reblog);
+    elements.img.classList.toggle("tootbox-mini", !!status.reblog);
+    elements.timeAnchor.classList.toggle("tootbox-mini", !!status.reblog);
+    elements.userNameWrapper.classList.toggle("tootbox-mini", !!status.reblog);
     if (status.reblog) {
-      this._states.elements!.subcontentTitle.textContent = "boost";
-      this._states.elements!.subcontent.appendChild(new TootBox(status.reblog));
+      elements.subcontentTitle.textContent = "boost";
+      elements.subcontent.appendChild(new TootBox(status.reblog));
     }
     else {
-      this._states.elements!.content.innerHTML = status.content;
+      elements.content.appendChild(this._processContentAsFragment(status.content));
     }
   }
 
@@ -113,6 +114,14 @@ export default class TootBox extends HTMLElement {
     this._states.elements!.img.classList.remove("tootbox-mini");
     this._states.elements!.timeAnchor.classList.remove("tootbox-mini");
     this._states.elements!.userNameWrapper.classList.remove("tootbox-mini");
+  }
+
+  private _processContentAsFragment(content: string) {
+    const fragment = document.createRange().createContextualFragment(content);
+    for (const anchor of fragment.querySelectorAll("a")) {
+      anchor.classList.add("coloraccentbold", "nodecoration", "underlineonhover");
+    }
+    return fragment;
   }
 
   updateTimeText() {

@@ -61,6 +61,7 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="css\accentcolor.css" />
     <Content Include="css\customelements\flow.css" />
     <Content Include="css\customelements\notibox.css" />
     <Content Include="css\customelements\timeline.css" />
@@ -107,6 +108,7 @@
     <TypeScriptCompile Include="sources\main.ts" />
     <TypeScriptCompile Include="sources\selection-canceller.ts" />
     <TypeScriptCompile Include="sources\storage.ts" />
+    <TypeScriptCompile Include="sources\style-controller.ts" />
     <TypeScriptCompile Include="sources\third-parties.d.ts" />
     <TypeScriptCompile Include="sources\time-updater.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />

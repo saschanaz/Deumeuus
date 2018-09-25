@@ -1,0 +1,15 @@
+﻿.coloraccent {
+    color: var(--accent-color);
+}
+
+.coloraccentbold {
+    color: var(--accent-color-bold);
+}
+
+.backgroundaccent {
+    background-color: var(--accent-color);
+}
+
+.borderaccent {
+    border-color: var(--accent-color);
+}
