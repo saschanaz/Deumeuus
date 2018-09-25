@@ -18,6 +18,7 @@
         flex: 1;
         display: flex;
         overflow-y: hidden;
+        overflow-x: auto; /* no-op, but workaround for https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/19095697/ */
     }
 
         deu-screen .screen-columns > * {
@@ -28,7 +29,7 @@
         }
 
 @media (max-width: 800px) {
-    deu-screen {
+    deu-screen .screen-columns {
         -ms-scroll-snap-points-x: snapInterval(0%, 100%);
         -ms-scroll-snap-type: mandatory;
     }

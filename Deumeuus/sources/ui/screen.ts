@@ -84,8 +84,18 @@ export class DeumeuusScreen extends HTMLElement {
     element(this, undefined, [
       element("div", { class: "screen-menubar" }, [
         elements.currentUserImage = element("img", { class: "screen-currentuser" }),
-        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE90A" /* MDL2 Comment */ }),
-        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE910" /* MDL2 Accounts */ }),
+        element("input", {
+          type: "button", class: "textbutton nobackground clickable", value: "\uE90A" /* MDL2 Comment */,
+          ".onclick": () => {
+            timeline.scrollIntoView({ behavior: "smooth" });
+          }
+        }),
+        element("input", {
+          type: "button", class: "textbutton nobackground clickable", value: "\uE910" /* MDL2 Accounts */,
+          ".onclick": () => {
+            notifications.scrollIntoView({ behavior: "smooth" });
+          }
+        }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE713" /* MDL2 Settings */ })
       ]),
       element("div", { class: "screen-columns" }, [

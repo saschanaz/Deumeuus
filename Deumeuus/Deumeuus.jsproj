@@ -85,6 +85,7 @@
     <Content Include="node_modules\localforage\dist\localforage.min.js" />
     <Content Include="node_modules\requirejs\require.js" />
     <Content Include="node_modules\scroll-agnostic-timeline\lib\index.js" />
+    <Content Include="node_modules\smoothscroll-polyfill\dist\smoothscroll.min.js" />
     <Content Include="node_modules\visible-children-observer\lib\index.js" />
     <Content Include="tsconfig.json" />
     <None Include="Deumeuus_TemporaryKey.pfx" />
