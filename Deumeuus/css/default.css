@@ -66,6 +66,10 @@ dialog {
     text-decoration: none;
 }
 
+.opacity5 {
+    opacity: .5;
+}
+
 .selectable {
     -webkit-user-select: element; /* paradoxically Edge specific */
     user-select: contain;
