@@ -37,6 +37,38 @@
   bot: string | null;
 }
 
+export interface Card {
+  /* The url associated with the card */
+  url: string;
+  /* The title of the card */
+  title: string;
+  /* The card description */
+  description: string;
+  /* The image associated with the card, if any */
+  image: string | null;
+  /* "link", "photo", "video", or "rich" */
+  type: string;
+  /* OEmbed data */
+  author_name: string | null;
+  /* OEmbed data */
+  author_url: string | null;
+  /* OEmbed data */
+  provider_name: string | null;
+  /* OEmbed data */
+  provider_url: string | null;
+  /* OEmbed data */
+  html: string | null;
+  /* OEmbed data */
+  width: number | null;
+  /* OEmbed data */
+  height: number | null;
+}
+
+export interface Context {
+  ancestors: Status[];
+  descendants: Status[];
+}
+
 export interface Notification {
   /** The notification ID */
   id: string;

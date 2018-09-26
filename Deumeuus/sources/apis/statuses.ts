@@ -1,5 +1,5 @@
 ﻿import { apiFetch } from "../api";
-import { Status } from "../entities";
+import { Status, Context, Card } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
 export interface MastodonStatusPostParameters {
@@ -31,11 +31,11 @@ export class MastodonStatusesAPI {
   }
 
   getContext(id: string) {
-    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/context`);
+    return this._fetch<Context>("GET", `/api/v1/statuses/${id}/context`);
   }
 
   getCard(id: string) {
-    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/card`);
+    return this._fetch<Card>("GET", `/api/v1/statuses/${id}/card`);
   }
 
   getRebloggers(id: string, limiter?: MastodonIDLimiter) {
