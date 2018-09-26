@@ -116,4 +116,10 @@ dialog {
     overflow: hidden;
 }
 
-*:focus:not(.focus-visible) { outline: none; }
+.verticalscrollable {
+    overflow-y: auto;
+}
+
+*:focus:not(.focus-visible) {
+    outline: none;
+}
