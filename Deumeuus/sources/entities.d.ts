@@ -37,35 +37,44 @@
   bot: string | null;
 }
 
+export interface Application {
+  /** Name of the app */
+  name: string;
+  /** Homepage URL of the app */
+  website: string | null;
+}
+
 export interface Card {
-  /* The url associated with the card */
+  /** The url associated with the card */
   url: string;
-  /* The title of the card */
+  /** The title of the card */
   title: string;
-  /* The card description */
+  /** The card description */
   description: string;
-  /* The image associated with the card, if any */
+  /** The image associated with the card, if any */
   image: string | null;
-  /* "link", "photo", "video", or "rich" */
-  type: string;
-  /* OEmbed data */
+  /** "link", "photo", "video", or "rich" */
+  type: "link" | "photo" | "video" | "rich";
+  /** OEmbed data */
   author_name: string | null;
-  /* OEmbed data */
+  /** OEmbed data */
   author_url: string | null;
-  /* OEmbed data */
+  /** OEmbed data */
   provider_name: string | null;
-  /* OEmbed data */
+  /** OEmbed data */
   provider_url: string | null;
-  /* OEmbed data */
+  /** OEmbed data */
   html: string | null;
-  /* OEmbed data */
+  /** OEmbed data */
   width: number | null;
-  /* OEmbed data */
+  /** OEmbed data */
   height: number | null;
 }
 
 export interface Context {
+  /** The ancestors of the status in the conversation, as a list of {@link Statuses} */
   ancestors: Status[];
+  /** The descendants of the status in the conversation, as a list of {@link Statuses} */
   descendants: Status[];
 }
 
@@ -126,7 +135,7 @@ export interface Status {
   /** An array of {@link Tags} */
   tags: any[];
   /** {@link Application} from which the status was posted */
-  application: any;
+  application: Application;
   /** The detected language for the status, if detected */
   language: string;
   /** Whether this is the pinned status for the account that posted it */
