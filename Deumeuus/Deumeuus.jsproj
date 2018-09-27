@@ -113,6 +113,7 @@
     <TypeScriptCompile Include="sources\time-updater.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
+    <TypeScriptCompile Include="sources\ui\namedpage.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />
     <TypeScriptCompile Include="sources\ui\flow.ts" />
     <TypeScriptCompile Include="sources\ui\writer.ts" />
