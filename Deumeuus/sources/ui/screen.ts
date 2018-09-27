@@ -156,7 +156,7 @@ export class DeumeuusScreen extends HTMLElement {
     }
     const toots = await this._states.user.timelines.home(limiter);
     toots
-      .map(toot => new Flow(new TootBox(toot)))
+      .map(toot => this._createTootFlowWithListener(toot))
       .forEach(box => this._states.elements!.homeTimeline.appendChild(box));
     return toots;
   }
@@ -191,7 +191,7 @@ export class DeumeuusScreen extends HTMLElement {
     this._states.elements!.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
+      this._states.elements!.homeTimeline.appendChild(this._createTootFlowWithListener(status));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
@@ -216,6 +216,16 @@ export class DeumeuusScreen extends HTMLElement {
       this._states.elements!.homeTimeline.classList.remove("realtime");
       this._states.elements!.notifications.classList.remove("realtime");
     }
+  }
+
+  private readonly _tootClickListener = (ev: CustomEvent) => {
+    new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
+  };
+
+  private _createTootFlowWithListener(status: Status) {
+    const box = new TootBox(status);
+    box.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
+    return new Flow(box);
   }
 
   async connectedCallback() {

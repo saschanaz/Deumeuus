@@ -75,7 +75,7 @@ export default class TootBox extends HTMLElement {
     const elements = this._states.elements = ({} as TootInternalStates["elements"])!;
     this.appendChild(element("div", { class: "flexfill" }, [
       element("div", { class: "tootbox-usercontent" }, [
-        elements.img = element("img", { class: "tootbox-userimage indicateclickable noselect" }),
+        elements.img = element("img", { class: "tootbox-userimage clickable" }),
         element("div", { class: "flexfill" }, [
           element("div", { class: "tootbox-topwrapper" }, [
             elements.userNameWrapper = element("div", { class: `tootbox-usernamewrapper` }, [
@@ -100,6 +100,15 @@ export default class TootBox extends HTMLElement {
         elements.subcontent = element("div")
       ])
     ]));
+
+    this.addEventListener("click", ev => {
+      const target = ev.target as HTMLElement;
+      if (target.localName !== "a" && !target.classList.contains("clickable")) {
+        this.dispatchEvent(new CustomEvent("deu-backdropclick", {
+          detail: { data: this._states.data }
+        }));
+      }
+    });
   }
 
   private _clearDOM() {
