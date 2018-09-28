@@ -8,6 +8,7 @@ import { Status, Notification } from "../entities";
 import { Writer } from "./writer";
 import openDialog from "../dialog-open";
 import { element } from "domliner";
+import { getSelectorPointerId, getSelectionCancellerPointerId } from "../selection-tracker";
 
 /*
  * TODO:
@@ -219,7 +220,10 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private readonly _tootClickListener = (ev: CustomEvent) => {
-    new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
+    const { isCollapsed } = getSelection();
+    if ((isCollapsed && ev.detail.pointerId !== getSelectionCancellerPointerId()) || (!isCollapsed && ev.detail.pointerId !== getSelectorPointerId())) {
+      new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
+    }
   };
 
   private _createTootFlowWithListener(status: Status) {

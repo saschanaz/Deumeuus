@@ -14,5 +14,5 @@
     if (userSelect === "none") {
       getSelection().empty();
     }
-  })
+  });
 }

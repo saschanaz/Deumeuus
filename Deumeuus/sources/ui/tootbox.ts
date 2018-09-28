@@ -101,14 +101,14 @@ export default class TootBox extends HTMLElement {
       ])
     ]));
 
-    this.addEventListener("click", ev => {
+    this.addEventListener("click", ((ev: PointerEvent) => {
       const target = ev.target as HTMLElement;
       if (target.localName !== "a" && !target.classList.contains("clickable")) {
         this.dispatchEvent(new CustomEvent("deu-backdropclick", {
-          detail: { data: this._states.data }
+          detail: { data: this._states.data, pointerId: ev.pointerId }
         }));
       }
-    });
+    }) as EventListener);
   }
 
   private _clearDOM() {
