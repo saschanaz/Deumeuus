@@ -1,4 +1,4 @@
-﻿import { element } from "domliner";
+import { element } from "domliner";
 import { Status } from "../entities";
 import { getRelativeTimeStatus } from "../relative-time";
 
@@ -42,7 +42,7 @@ export default class TootBox extends HTMLElement {
     elements.img.src = status.account.avatar;
     elements.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
     elements.timeAnchor.href = status.uri;
-    elements.displayName.textContent = status.account.display_name
+    elements.displayName.textContent = status.account.display_name;
     elements.screenName.textContent = `@${status.account.username}`;
 
     elements.subcontentContainer.classList.toggle("invisible", !status.reblog);
@@ -52,8 +52,7 @@ export default class TootBox extends HTMLElement {
     if (status.reblog) {
       elements.subcontentTitle.textContent = "boost";
       elements.subcontent.appendChild(new TootBox(status.reblog));
-    }
-    else {
+    } else {
       elements.content.appendChild(this._processContentAsFragment(status.content));
     }
   }

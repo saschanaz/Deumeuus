@@ -1,5 +1,5 @@
-﻿import TootBox from "./ui/tootbox";
 import { iterate } from "./iterate";
+import TootBox from "./ui/tootbox";
 
 export default function runTootBoxTimeRefesher(interval = 30000) {
   return setInterval(() => {

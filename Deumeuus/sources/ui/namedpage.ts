@@ -1,4 +1,4 @@
-﻿import { element } from "domliner";
+import { element } from "domliner";
 
 interface NamedPageInternalStates {
   title: string | null;

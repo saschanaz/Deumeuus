@@ -1,10 +1,10 @@
-﻿import { apiFetch } from "../api";
+import { apiFetch } from "../api";
 import { Notification } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
 export interface MastodonNotificationParameters extends MastodonIDLimiter {
   /** Arary of notifications to exclude (Allowed types: "follow", "favourite", "reblog", "mention") */
-  exclude_types?: Notification["type"][]
+  exclude_types?: Notification["type"][];
 }
 
 export class MastodonNotificationsAPI {

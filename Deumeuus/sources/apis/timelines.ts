@@ -1,4 +1,4 @@
-﻿import { apiFetch } from "../api";
+import { apiFetch } from "../api";
 import { Status } from "../entities";
 import { MastodonIDLimiter } from "./common";
 

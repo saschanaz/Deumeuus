@@ -1,17 +1,17 @@
-﻿// tslint:disable-next-line no-var-keyword
+// tslint:disable-next-line no-var-keyword
 var require = {
   baseUrl: ".",
   paths: {
     "dialog-polyfill": [
       "node_modules/dialog-polyfill/dialog-polyfill"
     ],
-    "domliner": [
+    domliner: [
       "node_modules/domliner/lib/domliner"
     ],
     "event-source-polyfill": [
       "node_modules/event-source-polyfill/src/eventsource.min"
     ],
-    "localforage": [
+    localforage: [
       "node_modules/localforage/dist/localforage.min"
     ],
     "scroll-agnostic-timeline": [

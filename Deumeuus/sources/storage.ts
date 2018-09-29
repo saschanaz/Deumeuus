@@ -1,4 +1,4 @@
-﻿import * as localforage from "localforage"
+import * as localforage from "localforage";
 import { ClientInformation } from "./api";
 
 export async function getInstanceTokenMap() {

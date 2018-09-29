@@ -1,4 +1,4 @@
-﻿import { element } from "domliner";
+import { element } from "domliner";
 import { Notification } from "../entities";
 import TootBox from "./tootbox";
 

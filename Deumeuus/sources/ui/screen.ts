@@ -1,20 +1,20 @@
-﻿import { MastodonAPI } from "../api";
-import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-timeline";
-import TootBox from "./tootbox";
-import Flow from "./flow";
-import { MastodonIDLimiter } from "../apis/common";
-import NotificationBox from "./notificationbox";
-import { Status, Notification } from "../entities";
-import { Writer } from "./writer";
-import openDialog from "../dialog-open";
 import { element } from "domliner";
-import { getSelectorPointerId, getSelectionCancellerPointerId } from "../selection-tracker";
+import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-timeline";
+import { MastodonAPI } from "../api";
+import { MastodonIDLimiter } from "../apis/common";
+import openDialog from "../dialog-open";
+import { Notification, Status } from "../entities";
+import { getSelectionCancellerPointerId, getSelectorPointerId } from "../selection-tracker";
+import Flow from "./flow";
+import NotificationBox from "./notificationbox";
+import TootBox from "./tootbox";
+import { Writer } from "./writer";
 
 /*
  * TODO:
  * Merge menu bar with the title bar
  * https://docs.microsoft.com/en-us/windows/uwp/design/shell/title-bar
- * 
+ *
  * If the title bar is absent (e.g. in mobile, or possibly in tablet mode),
  * show the menu bar in the bottom
  */
@@ -53,8 +53,7 @@ export class DeumeuusScreen extends HTMLElement {
       account.verifyCredentials().then(
         user => this._states.elements!.currentUserImage.src = user.avatar
       );
-    }
-    else {
+    } else {
       this._states.elements!.currentUserImage.src = "";
     }
   }
@@ -75,7 +74,7 @@ export class DeumeuusScreen extends HTMLElement {
         return lengthDiff;
       }
       return y.content!.data!.id.localeCompare(x.content!.data!.id);
-    }
+    };
     timeline.identify = x => x.content!.data!.id;
     timeline.addEventListener("click", ev => this._loadTimelineHandler(ev, timeline, this._retrieveHomeTimeline));
     timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
@@ -132,8 +131,7 @@ export class DeumeuusScreen extends HTMLElement {
           if (toots.length < limit) {
             parent.removeAttribute("hashole");
           }
-        }
-        else if (!ev.target.nextElementSibling) {
+        } else if (!ev.target.nextElementSibling) {
           // last-item only thing, so only max_id
           const toots = await loader.call(this, {
             limit,
@@ -167,7 +165,7 @@ export class DeumeuusScreen extends HTMLElement {
     if (!this._states.user) {
       throw new Error("No account information to retrieve notifications");
     }
-    const notifications = await this._states.user.notifications.getAll({ exclude_types: ["reblog", "favourite", "follow"], ...limiter || {} })
+    const notifications = await this._states.user.notifications.getAll({ exclude_types: ["reblog", "favourite", "follow"], ...limiter || {} });
     notifications
       .map(notification => new Flow(new NotificationBox(notification)))
       .forEach(box => this._states.elements!.notifications.appendChild(box));
@@ -224,7 +222,7 @@ export class DeumeuusScreen extends HTMLElement {
     if ((isCollapsed && ev.detail.pointerId !== getSelectionCancellerPointerId()) || (!isCollapsed && ev.detail.pointerId !== getSelectorPointerId())) {
       new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
     }
-  };
+  }
 
   private _createTootFlowWithListener(status: Status) {
     const box = new TootBox(status);

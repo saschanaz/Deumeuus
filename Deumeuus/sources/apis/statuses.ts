@@ -1,5 +1,5 @@
-﻿import { apiFetch } from "../api";
-import { Status, Context, Card } from "../entities";
+import { apiFetch } from "../api";
+import { Card, Context, Status } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
 export interface MastodonStatusPostParameters {

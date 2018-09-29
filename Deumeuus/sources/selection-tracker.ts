@@ -1,4 +1,4 @@
-﻿let downPointerId = -1;
+let downPointerId = -1;
 let selectionStartedBy = -1;
 let selectionCancelledBy = -1;
 

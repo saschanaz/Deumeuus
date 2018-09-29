@@ -1,4 +1,4 @@
-﻿import WebAuthenticationBroker = Windows.Security.Authentication.Web.WebAuthenticationBroker;
+import WebAuthenticationBroker = Windows.Security.Authentication.Web.WebAuthenticationBroker;
 import WebAuthenticationResult = Windows.Security.Authentication.Web.WebAuthenticationResult;
 import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthenticationOptions;
 import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
@@ -30,7 +30,7 @@ export async function authorizeUser(instance: string, redirect: string, clientId
 }
 
 export interface AccessTokenRequest {
-  grant_type: "authorization_code",
+  grant_type: "authorization_code";
   client_id: string;
   client_secret: string;
   code: string;

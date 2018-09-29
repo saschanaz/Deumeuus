@@ -1,10 +1,10 @@
-﻿import { registerApp, MastodonAPI } from "./api";
+import { MastodonAPI, registerApp } from "./api";
 import { authorizeUser, getUserToken } from "./oauth2";
-import * as storage from "./storage";
-import { DeumeuusScreen } from "./ui/screen";
 import startSelectionCanceller from "./selection-canceller";
-import runTootBoxTimeRefesher from "./time-updater";
+import * as storage from "./storage";
 import * as styleController from "./style-controller";
+import runTootBoxTimeRefesher from "./time-updater";
+import { DeumeuusScreen } from "./ui/screen";
 
 async function getStartingUser() {
   const users = (await storage.getUserInformationList()) || [];
@@ -12,7 +12,7 @@ async function getStartingUser() {
     return users[0];
   }
 
-  const instance = "https://pawoo.net"
+  const instance = "https://pawoo.net";
   const redirect = "deumeuus://ana.s.tasia";
   const keys = await registerApp(instance, {
     client_name: "deumeuus",
@@ -27,7 +27,7 @@ async function getStartingUser() {
     code: authCode,
     grant_type: "authorization_code",
     redirect_uri: redirect
-  })
+  });
 
   const user = {
     accessToken: authToken.access_token,

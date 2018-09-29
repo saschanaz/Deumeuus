@@ -1,11 +1,11 @@
-﻿import * as localforage from "localforage";
+import * as localforage from "localforage";
 
 export const styleElement = document.createElement("style");
 
 const uiSettings = new Windows.UI.ViewManagement.UISettings();
 uiSettings.addEventListener("colorvalueschanged", () => {
   if (styleElement.sheet) {
-    applyStyle(currentStyle)
+    applyStyle(currentStyle);
   }
 });
 const defaultStyle: AppStyle = Object.freeze({
@@ -60,8 +60,8 @@ export function applyStyle(style: AppStyle) {
     const systemAccentBoldColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentLight1 /* TODO: select based on system color mode (light mode/dark mode) */);
     const systemAccentFaintColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentDark1 /* TODO: select based on system color mode (light mode/dark mode) */);
     style.accentColor = `rgb(${systemAccentColor.r}, ${systemAccentColor.g}, ${systemAccentColor.b})`;
-    style.accentColorBold = `rgb(${systemAccentBoldColor.r}, ${systemAccentBoldColor.g}, ${systemAccentBoldColor.b})`
-    style.accentColorFaint = `rgb(${systemAccentFaintColor.r}, ${systemAccentFaintColor.g}, ${systemAccentFaintColor.b})`
+    style.accentColorBold = `rgb(${systemAccentBoldColor.r}, ${systemAccentBoldColor.g}, ${systemAccentBoldColor.b})`;
+    style.accentColorFaint = `rgb(${systemAccentFaintColor.r}, ${systemAccentFaintColor.g}, ${systemAccentFaintColor.b})`;
   }
   controllableSheet.insertRule(`:root {
     --accent-color: ${style.accentColor};

@@ -1,4 +1,4 @@
-﻿export default function startSelectionCanceller() {
+export default function startSelectionCanceller() {
   let potentialSelector = -1;
   document.body.addEventListener("pointerdown", ev => {
     const computed = getComputedStyle(ev.target! as Element);

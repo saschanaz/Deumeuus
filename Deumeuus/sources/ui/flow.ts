@@ -1,4 +1,4 @@
-﻿import { element } from "domliner";
+import { element } from "domliner";
 
 export default class Flow<T extends Element> extends HTMLElement {
   // TODO: use appendChild directly rather than .content

@@ -1,4 +1,4 @@
-﻿import { element } from "domliner";
+import { element } from "domliner";
 import { MastodonAPI } from "../api";
 import { MastodonStatusPostParameters } from "../apis/statuses";
 import { iterate } from "../iterate";
@@ -43,7 +43,7 @@ export class Writer extends HTMLElement {
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "X" /* TODO: AccountSelector */ }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "@" /* @ */ }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "L" /* location */ }),
-        element("input", { type: "button", class: "textbutton nobackground clickable", value: "F" /* folder */ }),
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "F" /* folder */ })
       ]),
       elements.remainingLengthIndicator = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
       elements.contentarea = element("div", { class: "writer-contentarea" }, [
@@ -74,7 +74,7 @@ export class Writer extends HTMLElement {
     elements.textarea.addEventListener("input", () => this._applyInputTextStatus());
 
     elements.clearButton.addEventListener("click", () => this.clear());
-    elements.writeButton.addEventListener("click", () => this._writeAction())
+    elements.writeButton.addEventListener("click", () => this._writeAction());
   }
 
   focusToTextArea() {
@@ -88,7 +88,7 @@ export class Writer extends HTMLElement {
   setText(text: string) {
     this._states.elements!.textarea.value = text;
     this._applyInputTextStatus();
-  };
+  }
 
   setSelectionRange(start: number, end: number) {
     this._states.elements!.textarea.setSelectionRange(start, end);
@@ -103,12 +103,11 @@ export class Writer extends HTMLElement {
   private _applyInputTextStatus() {
     const internal = this._states;
 
-    let remainingLength = this._getRemainingLength();
+    const remainingLength = this._getRemainingLength();
     internal.elements!.remainingLengthIndicator.textContent = `${remainingLength}`;
     if (remainingLength < 0) {
       internal.elements!.remainingLengthIndicator.classList.add("exceeded");
-    }
-    else {
+    } else {
       internal.elements!.remainingLengthIndicator.classList.remove("exceeded");
     }
     // Do not block writeAction when exceeded but just allow it
@@ -135,8 +134,7 @@ export class Writer extends HTMLElement {
     try {
       await internal.user.statuses.post(params);
       this.clear();
-    }
-    catch (err) {
+    } catch (err) {
       new Windows.UI.Popups.MessageDialog(`Failed to toot.\r\n${err.message || err}`).showAsync();
     }
     for (const clickable of clickables) {

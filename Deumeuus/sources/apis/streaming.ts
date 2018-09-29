@@ -1,4 +1,4 @@
-﻿import { EventSourcePolyfill } from "event-source-polyfill";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 export class MastodonStreamingAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }

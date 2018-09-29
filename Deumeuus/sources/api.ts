@@ -1,8 +1,8 @@
-﻿import * as entities from "./entities";
-import { MastodonTimelinesAPI } from "./apis/timelines";
-import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonNotificationsAPI } from "./apis/notifications";
+import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonStreamingAPI } from "./apis/streaming";
+import { MastodonTimelinesAPI } from "./apis/timelines";
+import * as entities from "./entities";
 
 export interface UserCredentials extends entities.Account {
   /** Selected preference: Default privacy of new toots*/
@@ -24,8 +24,7 @@ function queryMapToString(queryMap: Record<string, any>) {
       for (const item of value) {
         params.append(`${key}[]`, item);
       }
-    }
-    else {
+    } else {
       params.append(key, value);
     }
   }
@@ -50,7 +49,7 @@ export async function apiFetch<T>(instance: string, accessToken: string, method:
   const response = await fetch(remote, {
     method,
     headers: {
-      "Authorization": `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`
     },
     body
   });
