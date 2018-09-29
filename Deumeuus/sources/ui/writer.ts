@@ -40,12 +40,14 @@ export class Writer extends HTMLElement {
     const elements = this._states.elements = ({} as WriterInternalStates["elements"])!;
     this.appendChild(element("div", { class: "writer sticky-bottom" }, [
       element("div", { class: "writer-tools writer-tools-top" }, [
-        element("input", { type: "button", class: "textbutton nobackground clickable", value: "X" /* TODO: AccountSelector */ }),
+        /* TODO: AccountSelector */
+        element("input", { type: "button", class: "textbutton nobackground clickable", value: "X" }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "@" /* @ */ }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "L" /* location */ }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "F" /* folder */ })
       ]),
-      elements.remainingLengthIndicator = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
+      elements.remainingLengthIndicator
+        = element("div", { class: "writer-remaininglengthindicator" }, `${maxTextLength}`),
       elements.contentarea = element("div", { class: "writer-contentarea" }, [
         elements.textarea = element("textarea", {
           class: "writer-textarea", placeholder: "Write here", spellcheck: false
@@ -60,7 +62,10 @@ export class Writer extends HTMLElement {
         }),
         element("input", { type: "button", class: "textbutton nobackground clickable", value: "Ment" }),
         elements.writeButton = element("input", {
-          type: "button", class: "textbutton clickable backgroundaccent", value: "\ue830" /* quill */, disabled: "disabled"
+          type: "button",
+          class: "textbutton clickable backgroundaccent",
+          value: "\ue830" /* quill */,
+          disabled: "disabled"
         })
       ])
     ]));
@@ -122,7 +127,7 @@ export class Writer extends HTMLElement {
       return;
     }
 
-    const clickables = this.querySelectorAll("input[type=button],textarea") as NodeListOf<HTMLInputElement | HTMLTextAreaElement>;
+    const clickables = this.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input[type=button],textarea");
     for (const clickable of iterate(clickables)) {
       clickable.disabled = true;
     }

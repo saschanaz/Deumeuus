@@ -4,7 +4,12 @@ import WebAuthenticationOptions = Windows.Security.Authentication.Web.WebAuthent
 import WebAuthenticationStatus = Windows.Security.Authentication.Web.WebAuthenticationStatus;
 
 export async function authorizeUser(instance: string, redirect: string, clientId: string) {
-  const uri = new Windows.Foundation.Uri(instance, `/oauth/authorize?scope=read%20write%20follow&response_type=code&redirect_uri=${encodeURIComponent(redirect)}&client_id=${clientId}`);
+  const uri = new Windows.Foundation.Uri(
+    instance,
+    `/oauth/authorize?scope=read%20write%20follow&response_type=code&redirect_uri=${
+      encodeURIComponent(redirect)
+    }&client_id=${clientId}`
+  );
 
   let authentication: WebAuthenticationResult | undefined;
   while (!authentication || authentication.responseStatus !== WebAuthenticationStatus.success) {

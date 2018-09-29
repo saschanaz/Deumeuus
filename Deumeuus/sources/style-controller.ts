@@ -40,7 +40,7 @@ export function applyStyle(style: AppStyle) {
   }
   const view = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
 
-  // https://social.msdn.microsoft.com/Forums/vstudio/en-US/76543875-2725-43ed-9df9-04fe82b0176f/uwpwindows-10-titlebar-fullscreen?forum=wpdevelop
+  // https://social.msdn.microsoft.com/Forums/vstudio/en-US/76543875-2725-43ed-9df9-04fe82b0176f
   view.titleBar.backgroundColor
     = view.titleBar.inactiveBackgroundColor
     = view.titleBar.buttonBackgroundColor
@@ -57,11 +57,14 @@ export function applyStyle(style: AppStyle) {
 
   if (style.accentColor === "SystemColor") {
     const systemAccentColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accent);
-    const systemAccentBoldColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentLight1 /* TODO: select based on system color mode (light mode/dark mode) */);
-    const systemAccentFaintColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentDark1 /* TODO: select based on system color mode (light mode/dark mode) */);
+    /* TODO: select based on system color mode (light mode/dark mode) */
+    const systemAccentBoldColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentLight1);
+    const systemAccentFaintColor = uiSettings.getColorValue(Windows.UI.ViewManagement.UIColorType.accentDark1);
     style.accentColor = `rgb(${systemAccentColor.r}, ${systemAccentColor.g}, ${systemAccentColor.b})`;
-    style.accentColorBold = `rgb(${systemAccentBoldColor.r}, ${systemAccentBoldColor.g}, ${systemAccentBoldColor.b})`;
-    style.accentColorFaint = `rgb(${systemAccentFaintColor.r}, ${systemAccentFaintColor.g}, ${systemAccentFaintColor.b})`;
+    style.accentColorBold =
+      `rgb(${systemAccentBoldColor.r}, ${systemAccentBoldColor.g}, ${systemAccentBoldColor.b})`;
+    style.accentColorFaint =
+      `rgb(${systemAccentFaintColor.r}, ${systemAccentFaintColor.g}, ${systemAccentFaintColor.b})`;
   }
   controllableSheet.insertRule(`:root {
     --accent-color: ${style.accentColor};

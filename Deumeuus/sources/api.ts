@@ -5,7 +5,7 @@ import { MastodonTimelinesAPI } from "./apis/timelines";
 import * as entities from "./entities";
 
 export interface UserCredentials extends entities.Account {
-  /** Selected preference: Default privacy of new toots*/
+  /** Selected preference: Default privacy of new toots */
   privacy: boolean;
   /** Selected preference: Mark media as sensitive by default? */
   sensitive: boolean;
@@ -43,7 +43,13 @@ function queryMapToFormData(queryMap: Record<string, any>) {
   return data;
 }
 
-export async function apiFetch<T>(instance: string, accessToken: string, method: string, path: string, queryMap: Record<string, any> = {}) {
+export async function apiFetch<T>(
+  instance: string,
+  accessToken: string,
+  method: string,
+  path: string,
+  queryMap: Record<string, any> = {}
+) {
   const remote = new URL(`${path}${method === "GET" ? queryMapToString(queryMap) : ""}`, instance).toString();
   const body = method !== "GET" ? queryMapToFormData(queryMap) : null;
   const response = await fetch(remote, {

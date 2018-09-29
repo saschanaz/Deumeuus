@@ -68,7 +68,10 @@ export class DeumeuusScreen extends HTMLElement {
     const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
     const notifications = elements.notifications = new ScrollAgnosticTimeline();
     timeline.max = notifications.max = 100;
-    timeline.compare = notifications.compare = (x: Flow<TootBox | NotificationBox>, y: Flow<TootBox | NotificationBox>) => {
+    timeline.compare = notifications.compare = (
+      x: Flow<TootBox | NotificationBox>,
+      y: Flow<TootBox | NotificationBox>
+    ) => {
       const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
       if (lengthDiff) {
         return lengthDiff;
@@ -78,7 +81,10 @@ export class DeumeuusScreen extends HTMLElement {
     timeline.identify = x => x.content!.data!.id;
     timeline.addEventListener("click", ev => this._loadTimelineHandler(ev, timeline, this._retrieveHomeTimeline));
     timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
-    notifications.addEventListener("click", ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications));
+    notifications.addEventListener(
+      "click",
+      ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications)
+    );
     notifications.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
 
     element(this, undefined, [
@@ -96,7 +102,11 @@ export class DeumeuusScreen extends HTMLElement {
             notifications.scrollIntoView({ behavior: "smooth" });
           }
         }),
-        element("input", { type: "button", class: "textbutton nobackground clickable", value: "\uE713" /* MDL2 Settings */ })
+        element("input", {
+          type: "button",
+          class: "textbutton nobackground clickable",
+          value: "\uE713" /* MDL2 Settings */
+        })
       ]),
       element("div", { class: "screen-columns" }, [
         timeline as HTMLElement,
@@ -114,7 +124,11 @@ export class DeumeuusScreen extends HTMLElement {
     });
   }
 
-  private async _loadTimelineHandler(ev: MouseEvent, timeline: ScrollAgnosticTimeline<any>, loader: (limiter: MastodonIDLimiter) => Promise<any[]>) {
+  private async _loadTimelineHandler(
+    ev: MouseEvent,
+    timeline: ScrollAgnosticTimeline<any>,
+    loader: (limiter: MastodonIDLimiter) => Promise<any[]>
+  ) {
     if (ev.target instanceof Element) {
       if (ev.target.classList.contains("flow-hole")) {
         const parent = ev.target.parentElement! as Flow<any>;
@@ -165,7 +179,10 @@ export class DeumeuusScreen extends HTMLElement {
     if (!this._states.user) {
       throw new Error("No account information to retrieve notifications");
     }
-    const notifications = await this._states.user.notifications.getAll({ exclude_types: ["reblog", "favourite", "follow"], ...limiter || {} });
+    const notifications = await this._states.user.notifications.getAll({
+      exclude_types: ["reblog", "favourite", "follow"],
+      ...limiter || {}
+    });
     notifications
       .map(notification => new Flow(new NotificationBox(notification)))
       .forEach(box => this._states.elements!.notifications.appendChild(box));
@@ -219,7 +236,10 @@ export class DeumeuusScreen extends HTMLElement {
 
   private readonly _tootClickListener = (ev: CustomEvent) => {
     const { isCollapsed } = getSelection();
-    if ((isCollapsed && ev.detail.pointerId !== getSelectionCancellerPointerId()) || (!isCollapsed && ev.detail.pointerId !== getSelectorPointerId())) {
+    if (
+      (isCollapsed && ev.detail.pointerId !== getSelectionCancellerPointerId()) ||
+      (!isCollapsed && ev.detail.pointerId !== getSelectorPointerId())
+    ) {
       new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
     }
   }
