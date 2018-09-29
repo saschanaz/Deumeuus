@@ -1,6 +1,4 @@
-﻿/// <reference path="../node_modules/localforage/typings/localforage.d.ts" />
-
-import * as localforage from "localforage"
+﻿import * as localforage from "localforage"
 import { ClientInformation } from "./api";
 
 export async function getInstanceTokenMap() {

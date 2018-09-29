@@ -14,6 +14,7 @@ export function* iterate<T>(iterable: IndexedIterable<T>) {
   if (iterable[Symbol.iterator]) {
     yield* iterable[Symbol.iterator]();
   }
+  // tslint:disable-next-line prefer-for-of
   for (let i = 0; i < iterable.length; i++) {
     yield iterable[i];
   }

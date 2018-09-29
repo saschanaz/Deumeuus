@@ -38,7 +38,6 @@ export function applyStyle(style: AppStyle) {
   if (!controllableSheet) {
     throw new Error("The style element must be added to the document as a child before applying style");
   }
-  const uiSettings = new Windows.UI.ViewManagement.UISettings();
   const view = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
 
   // https://social.msdn.microsoft.com/Forums/vstudio/en-US/76543875-2725-43ed-9df9-04fe82b0176f/uwpwindows-10-titlebar-fullscreen?forum=wpdevelop

@@ -1,4 +1,5 @@
-﻿var require = {
+﻿// tslint:disable-next-line no-var-keyword
+var require = {
   baseUrl: ".",
   paths: {
     "dialog-polyfill": [
