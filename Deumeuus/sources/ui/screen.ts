@@ -115,6 +115,22 @@ export class DeumeuusScreen extends HTMLElement {
     ]);
 
     elements.writer = new Writer();
+
+    const callback = (mutations: MutationRecord[]) => {
+      for (const mutation of mutations) {
+        for (const addedNode of mutation.addedNodes) {
+          if (addedNode instanceof Flow) {
+            if (addedNode.content instanceof TootBox) {
+              addedNode.content.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
+            } else if (addedNode.content instanceof NotificationBox) {
+              addedNode.content.addEventListener("deu-backdropclick", this._notiClickListener as EventListener);
+            }
+          }
+        }
+      }
+    };
+    new MutationObserver(callback).observe(timeline as Node, { childList: true });
+    new MutationObserver(callback).observe(notifications as Node, { childList: true });
   }
 
   openWriterDialog() {
@@ -169,7 +185,7 @@ export class DeumeuusScreen extends HTMLElement {
     }
     const toots = await this._states.user.timelines.home(limiter);
     toots
-      .map(toot => this._createTootFlowWithListener(toot))
+      .map(toot => new Flow(new TootBox(toot)))
       .forEach(box => this._states.elements!.homeTimeline.appendChild(box));
     return toots;
   }
@@ -207,7 +223,7 @@ export class DeumeuusScreen extends HTMLElement {
     this._states.elements!.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements!.homeTimeline.appendChild(this._createTootFlowWithListener(status));
+      this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
@@ -234,20 +250,24 @@ export class DeumeuusScreen extends HTMLElement {
     }
   }
 
-  private readonly _tootClickListener = (ev: CustomEvent) => {
+  private static readonly _hasNoSelection = (pointerId: number) => {
     const { isCollapsed } = getSelection();
-    if (
-      (isCollapsed && ev.detail.pointerId !== getSelectionCancellerPointerId()) ||
-      (!isCollapsed && ev.detail.pointerId !== getSelectorPointerId())
-    ) {
+    return (isCollapsed && pointerId !== getSelectionCancellerPointerId()) ||
+      (!isCollapsed && pointerId !== getSelectorPointerId());
+  }
+
+  private readonly _tootClickListener = (ev: CustomEvent) => {
+    if (DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
       new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
     }
   }
 
-  private _createTootFlowWithListener(status: Status) {
-    const box = new TootBox(status);
-    box.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
-    return new Flow(box);
+  private readonly _notiClickListener = (ev: CustomEvent) => {
+    if (DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
+      if ((ev.target as NotificationBox).data!.type === "mention") {
+        new Windows.UI.Popups.MessageDialog((ev.detail.data as Notification).status!.content).showAsync();
+      }
+    }
   }
 
   async connectedCallback() {

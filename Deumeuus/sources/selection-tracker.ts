@@ -10,7 +10,7 @@ export function getSelectionCancellerPointerId() {
   return selectionCancelledBy;
 }
 
-window.addEventListener("selectstart", ev => {
+window.addEventListener("selectstart", () => {
   selectionStartedBy = downPointerId;
   selectionCancelledBy = -1;
 });

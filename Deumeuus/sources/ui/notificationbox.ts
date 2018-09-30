@@ -49,7 +49,15 @@ export default class NotificationBox extends HTMLElement {
   private _initializeDOM() {
     const elements = this._states.elements = ({} as NotificationInternalStates["elements"])!;
     this.appendChild(
-      elements.status = element(new TootBox(), { class: "invisible" })
+      elements.status = element(new TootBox(), {
+        class: "invisible", this: l => {
+          l.addEventListener("deu-backdropclick", ((ev: CustomEvent) => {
+            this.dispatchEvent(new CustomEvent("deu-backdropclick", {
+              detail: { data: this.data, pointerId: ev.detail.pointerId }
+            }));
+          }) as EventListener);
+        }
+      })
     );
   }
 
