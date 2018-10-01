@@ -16,7 +16,7 @@ interface TootInternalStates {
     subcontentContainer: HTMLDivElement;
     subcontentTitle: HTMLDivElement;
     subcontent: HTMLDivElement;
-  } | null;
+  };
 }
 
 export default class TootBox extends HTMLElement {
@@ -24,7 +24,7 @@ export default class TootBox extends HTMLElement {
     data: null,
     createdAt: null,
 
-    elements: null
+    elements: this._initializeDOM()
   };
 
   get data() {
@@ -38,7 +38,7 @@ export default class TootBox extends HTMLElement {
       return;
     }
 
-    const elements = this._states.elements!;
+    const elements = this._states.elements;
     elements.img.src = status.account.avatar;
     elements.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
     elements.timeAnchor.href = status.uri;
@@ -63,7 +63,6 @@ export default class TootBox extends HTMLElement {
 
   constructor(data?: Status) {
     super();
-    this._initializeDOM();
 
     if (data) {
       this.data = data;
@@ -71,7 +70,7 @@ export default class TootBox extends HTMLElement {
   }
 
   private _initializeDOM() {
-    const elements = this._states.elements = ({} as TootInternalStates["elements"])!;
+    const elements = {} as TootInternalStates["elements"];
     this.appendChild(element("div", { class: "flexfill" }, [
       element("div", { class: "tootbox-usercontent" }, [
         elements.img = element("img", { class: "tootbox-userimage clickable" }),
@@ -108,20 +107,21 @@ export default class TootBox extends HTMLElement {
         }));
       }
     }) as EventListener);
+    return elements;
   }
 
   private _clearDOM() {
-    this._states.elements!.img.src = "";
-    this._states.elements!.content.innerHTML = "";
-    this._states.elements!.timeAnchor.textContent = "";
-    this._states.elements!.displayName.textContent = "";
-    this._states.elements!.screenName.textContent = "";
-    this._states.elements!.subcontent.innerHTML = "";
-    this._states.elements!.subcontentTitle.textContent = "";
-    this._states.elements!.subcontentContainer.classList.add("invisible");
-    this._states.elements!.img.classList.remove("tootbox-mini");
-    this._states.elements!.timeAnchor.classList.remove("tootbox-mini");
-    this._states.elements!.userNameWrapper.classList.remove("tootbox-mini");
+    this._states.elements.img.src = "";
+    this._states.elements.content.innerHTML = "";
+    this._states.elements.timeAnchor.textContent = "";
+    this._states.elements.displayName.textContent = "";
+    this._states.elements.screenName.textContent = "";
+    this._states.elements.subcontent.innerHTML = "";
+    this._states.elements.subcontentTitle.textContent = "";
+    this._states.elements.subcontentContainer.classList.add("invisible");
+    this._states.elements.img.classList.remove("tootbox-mini");
+    this._states.elements.timeAnchor.classList.remove("tootbox-mini");
+    this._states.elements.userNameWrapper.classList.remove("tootbox-mini");
   }
 
   private _processContentAsFragment(content: string) {
@@ -134,7 +134,7 @@ export default class TootBox extends HTMLElement {
 
   updateTimeText() {
     if (this._states.data) {
-      this._states.elements!.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
+      this._states.elements.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
     }
   }
 }

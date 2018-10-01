@@ -15,13 +15,13 @@ interface WriterInternalStates {
     clearButton: HTMLInputElement;
     attachMediaButton: HTMLInputElement;
     writeButton: HTMLInputElement;
-  } | null;
+  };
 }
 
 export class Writer extends HTMLElement {
   private readonly _states: WriterInternalStates = {
     user: null,
-    elements: null
+    elements: this._initializeDOM()
   };
 
   get user() {
@@ -31,13 +31,8 @@ export class Writer extends HTMLElement {
     this._states.user = user;
   }
 
-  constructor() {
-    super();
-    this._initializeDOM();
-  }
-
   private _initializeDOM() {
-    const elements = this._states.elements = ({} as WriterInternalStates["elements"])!;
+    const elements = {} as WriterInternalStates["elements"];
     this.appendChild(element("div", { class: "writer sticky-bottom" }, [
       element("div", { class: "writer-tools writer-tools-top" }, [
         /* TODO: AccountSelector */
@@ -80,10 +75,11 @@ export class Writer extends HTMLElement {
 
     elements.clearButton.addEventListener("click", () => this.clear());
     elements.writeButton.addEventListener("click", () => this._writeAction());
+    return elements;
   }
 
   focusToTextArea() {
-    this._states.elements!.textarea.focus();
+    this._states.elements.textarea.focus();
   }
 
   clear() {
@@ -91,39 +87,39 @@ export class Writer extends HTMLElement {
   }
 
   setText(text: string) {
-    this._states.elements!.textarea.value = text;
+    this._states.elements.textarea.value = text;
     this._applyInputTextStatus();
   }
 
   setSelectionRange(start: number, end: number) {
-    this._states.elements!.textarea.setSelectionRange(start, end);
+    this._states.elements.textarea.setSelectionRange(start, end);
   }
 
   private _getRemainingLength() {
     const internal = this._states;
 
-    return maxTextLength - internal.elements!.textarea.value.length;
+    return maxTextLength - internal.elements.textarea.value.length;
   }
 
   private _applyInputTextStatus() {
     const internal = this._states;
 
     const remainingLength = this._getRemainingLength();
-    internal.elements!.remainingLengthIndicator.textContent = `${remainingLength}`;
+    internal.elements.remainingLengthIndicator.textContent = `${remainingLength}`;
     if (remainingLength < 0) {
-      internal.elements!.remainingLengthIndicator.classList.add("exceeded");
+      internal.elements.remainingLengthIndicator.classList.add("exceeded");
     } else {
-      internal.elements!.remainingLengthIndicator.classList.remove("exceeded");
+      internal.elements.remainingLengthIndicator.classList.remove("exceeded");
     }
     // Do not block writeAction when exceeded but just allow it
     // so that text length limit change can be immediately applied without hard-coded value change
 
-    internal.elements!.writeButton.disabled = !internal.elements!.textarea.value.trim();
+    internal.elements.writeButton.disabled = !internal.elements.textarea.value.trim();
   }
 
   private async _writeAction() {
     const internal = this._states;
-    if (!internal.user || !internal.elements!.textarea.value.trim()) {
+    if (!internal.user || !internal.elements.textarea.value.trim()) {
       return;
     }
 
@@ -133,7 +129,7 @@ export class Writer extends HTMLElement {
     }
 
     const params = {
-      status: internal.elements!.textarea.value
+      status: internal.elements.textarea.value
     } as MastodonStatusPostParameters;
 
     try {
@@ -145,7 +141,7 @@ export class Writer extends HTMLElement {
     for (const clickable of clickables) {
       clickable.disabled = false;
     }
-    internal.elements!.textarea.focus();
+    internal.elements.textarea.focus();
   }
 }
 customElements.define("deu-writer", Writer);

@@ -29,7 +29,7 @@ interface DeumeuusScreenInternalStates {
     notifications: ScrollAgnosticTimeline<Flow<NotificationBox>>;
     writerDialog: HTMLDialogElement;
     writer: Writer;
-  } | null;
+  };
 }
 
 export class DeumeuusScreen extends HTMLElement {
@@ -37,34 +37,29 @@ export class DeumeuusScreen extends HTMLElement {
     user: null,
     stream: null,
 
-    elements: null
+    elements: this._initializeDOM()
   };
   get user() {
     return this._states.user;
   }
   set user(account: MastodonAPI | null) {
     this._states.user = account;
-    this._states.elements!.writer.user = account;
+    this._states.elements.writer.user = account;
 
     if (account) {
       if (account && document.body.contains(this)) {
         this._retrieveInitial();
       }
       account.verifyCredentials().then(
-        user => this._states.elements!.currentUserImage.src = user.avatar
+        user => this._states.elements.currentUserImage.src = user.avatar
       );
     } else {
-      this._states.elements!.currentUserImage.src = "";
+      this._states.elements.currentUserImage.src = "";
     }
   }
 
-  constructor() {
-    super();
-    this._initializeDOM();
-  }
-
   private _initializeDOM() {
-    const elements = this._states.elements = ({} as DeumeuusScreenInternalStates["elements"])!;
+    const elements = {} as DeumeuusScreenInternalStates["elements"];
     const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
     const notifications = elements.notifications = new ScrollAgnosticTimeline();
     timeline.max = notifications.max = 100;
@@ -131,12 +126,13 @@ export class DeumeuusScreen extends HTMLElement {
     };
     new MutationObserver(callback).observe(timeline as Node, { childList: true });
     new MutationObserver(callback).observe(notifications as Node, { childList: true });
+    return elements;
   }
 
   openWriterDialog() {
     openDialog({
       classes: ["limitedwidth"],
-      nodes: [this._states.elements!.writer]
+      nodes: [this._states.elements.writer]
     });
   }
 
@@ -186,7 +182,7 @@ export class DeumeuusScreen extends HTMLElement {
     const toots = await this._states.user.timelines.home(limiter);
     toots
       .map(toot => new Flow(new TootBox(toot)))
-      .forEach(box => this._states.elements!.homeTimeline.appendChild(box));
+      .forEach(box => this._states.elements.homeTimeline.appendChild(box));
     return toots;
   }
 
@@ -201,7 +197,7 @@ export class DeumeuusScreen extends HTMLElement {
     });
     notifications
       .map(notification => new Flow(new NotificationBox(notification)))
-      .forEach(box => this._states.elements!.notifications.appendChild(box));
+      .forEach(box => this._states.elements.notifications.appendChild(box));
     return notifications;
   }
 
@@ -219,22 +215,22 @@ export class DeumeuusScreen extends HTMLElement {
       throw new Error("No account information to retrieve stream");
     }
     const source = this._states.stream = await this._states.user.streaming.user();
-    this._states.elements!.homeTimeline.classList.add("realtime");
-    this._states.elements!.notifications.classList.add("realtime");
+    this._states.elements.homeTimeline.classList.add("realtime");
+    this._states.elements.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements!.homeTimeline.appendChild(new Flow(new TootBox(status)));
+      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox(status)));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
       if (notification.type === "mention") {
-        this._states.elements!.notifications.appendChild(new Flow(new NotificationBox(notification)));
+        this._states.elements.notifications.appendChild(new Flow(new NotificationBox(notification)));
       }
     }) as EventListener);
     source.addEventListener("delete", ((ev: MessageEvent) => {
       const id = ev.data as string;
       // TODO: remove from notifications
-      const child = this._states.elements!.homeTimeline.find(id);
+      const child = this._states.elements.homeTimeline.find(id);
       if (child) {
         child.content!.classList.add("deleted");
       }
@@ -245,8 +241,8 @@ export class DeumeuusScreen extends HTMLElement {
     if (this._states.stream) {
       this._states.stream.close();
       this._states.stream = null;
-      this._states.elements!.homeTimeline.classList.remove("realtime");
-      this._states.elements!.notifications.classList.remove("realtime");
+      this._states.elements.homeTimeline.classList.remove("realtime");
+      this._states.elements.notifications.classList.remove("realtime");
     }
   }
 

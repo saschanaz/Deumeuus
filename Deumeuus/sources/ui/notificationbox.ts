@@ -7,7 +7,7 @@ interface NotificationInternalStates {
   createdAt: Date | null;
   elements: {
     status: TootBox;
-  } | null;
+  };
 }
 
 export default class NotificationBox extends HTMLElement {
@@ -15,7 +15,7 @@ export default class NotificationBox extends HTMLElement {
     data: null,
     createdAt: null,
 
-    elements: null
+    elements: this._initializeDOM()
   };
 
   get data() {
@@ -29,8 +29,8 @@ export default class NotificationBox extends HTMLElement {
       return;
     }
 
-    this._states.elements!.status.classList.toggle("invisible", !notification.status);
-    this._states.elements!.status.data = notification.status;
+    this._states.elements.status.classList.toggle("invisible", !notification.status);
+    this._states.elements.status.data = notification.status;
   }
 
   get createdAt() {
@@ -39,7 +39,6 @@ export default class NotificationBox extends HTMLElement {
 
   constructor(data?: Notification) {
     super();
-    this._initializeDOM();
 
     if (data) {
       this.data = data;
@@ -47,7 +46,7 @@ export default class NotificationBox extends HTMLElement {
   }
 
   private _initializeDOM() {
-    const elements = this._states.elements = ({} as NotificationInternalStates["elements"])!;
+    const elements = {} as NotificationInternalStates["elements"];
     this.appendChild(
       elements.status = element(new TootBox(), {
         class: "invisible", this: l => {
@@ -59,10 +58,11 @@ export default class NotificationBox extends HTMLElement {
         }
       })
     );
+    return elements;
   }
 
   private _clearDOM() {
-    this._states.elements!.status.innerHTML = "";
+    this._states.elements.status.innerHTML = "";
   }
 }
 customElements.define("deu-notibox", NotificationBox);
