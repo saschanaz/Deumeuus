@@ -112,6 +112,7 @@
     <TypeScriptCompile Include="sources\style-controller.ts" />
     <TypeScriptCompile Include="sources\third-parties.d.ts" />
     <TypeScriptCompile Include="sources\time-updater.ts" />
+    <TypeScriptCompile Include="sources\ui\conversation-viewer.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\namedpage.ts" />
