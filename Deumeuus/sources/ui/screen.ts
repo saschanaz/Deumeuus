@@ -33,7 +33,7 @@ interface DeumeuusScreenInternalStates {
 }
 
 export class DeumeuusScreen extends HTMLElement {
-  private _states: DeumeuusScreenInternalStates = {
+  private readonly _states: DeumeuusScreenInternalStates = {
     user: null,
     stream: null,
 

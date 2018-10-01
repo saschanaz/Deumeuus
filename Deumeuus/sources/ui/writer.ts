@@ -19,7 +19,7 @@ interface WriterInternalStates {
 }
 
 export class Writer extends HTMLElement {
-  private _states: WriterInternalStates = {
+  private readonly _states: WriterInternalStates = {
     user: null,
     elements: null
   };

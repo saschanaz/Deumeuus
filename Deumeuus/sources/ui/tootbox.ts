@@ -20,7 +20,7 @@ interface TootInternalStates {
 }
 
 export default class TootBox extends HTMLElement {
-  private _states: TootInternalStates = {
+  private readonly _states: TootInternalStates = {
     data: null,
     createdAt: null,
 

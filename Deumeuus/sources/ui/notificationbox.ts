@@ -11,7 +11,7 @@ interface NotificationInternalStates {
 }
 
 export default class NotificationBox extends HTMLElement {
-  private _states: NotificationInternalStates = {
+  private readonly _states: NotificationInternalStates = {
     data: null,
     createdAt: null,
 

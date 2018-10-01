@@ -10,7 +10,7 @@ interface NamedPageInternalStates {
 }
 
 export default class NamedPage extends HTMLElement {
-  private _states: NamedPageInternalStates = {
+  private readonly _states: NamedPageInternalStates = {
     title: null,
     elements: null
   };
