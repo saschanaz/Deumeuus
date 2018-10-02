@@ -101,7 +101,12 @@ export default class TootBox extends HTMLElement {
 
     this.addEventListener("click", ((ev: PointerEvent) => {
       const target = ev.target as HTMLElement;
-      if (target.localName !== "a" && !target.classList.contains("clickable")) {
+      if (
+        target.localName !== "a" &&
+        // Mastodon external links have spans inside
+        target.parentElement!.localName !== "a" &&
+        !target.classList.contains("clickable")
+      ) {
         this.dispatchEvent(new CustomEvent("deu-backdropclick", {
           detail: { data: this._states.data, pointerId: ev.pointerId }
         }));
