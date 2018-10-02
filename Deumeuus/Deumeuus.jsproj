@@ -62,6 +62,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="css\accentcolor.css" />
+    <Content Include="css\customelements\convo.css" />
     <Content Include="css\customelements\flow.css" />
     <Content Include="css\customelements\notibox.css" />
     <Content Include="css\customelements\timeline.css" />
@@ -114,6 +115,7 @@
     <TypeScriptCompile Include="sources\time-updater.ts" />
     <TypeScriptCompile Include="sources\ui\conversation-viewer.ts" />
     <TypeScriptCompile Include="sources\ui\notificationbox.ts" />
+    <TypeScriptCompile Include="sources\dialog-openers.ts" />
     <TypeScriptCompile Include="sources\ui\screen.ts" />
     <TypeScriptCompile Include="sources\ui\namedpage.ts" />
     <TypeScriptCompile Include="sources\ui\tootbox.ts" />

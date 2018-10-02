@@ -47,7 +47,7 @@ export function applyStyle(style: AppStyle) {
     = view.titleBar.buttonInactiveBackgroundColor
     = Windows.UI.ColorHelper.fromArgb(0xFF, 0x1a, 0x1a, 0x1a);
 
-  controllableSheet.insertRule(`body {
+  controllableSheet.insertRule(`body, dialog {
     background-color: ${style.backgroundColor};
     font-family: ${style.fontFamily} !important;
 }`);

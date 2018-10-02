@@ -1,6 +1,6 @@
 ﻿import createDialogAutoPolyfill from "./dialog-polyfill-auto";
 
-export default function openDialog({ nodes, classes }: { nodes: Node[], classes: string[] }) {
+export default function openDialog({ nodes, classes }: { nodes: Node[], classes?: string[] }) {
   const dialog = createDialogAutoPolyfill();
   for (const node of nodes) {
     dialog.appendChild(node);

@@ -3,6 +3,7 @@ import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-t
 import { MastodonAPI } from "../api";
 import { MastodonIDLimiter } from "../apis/common";
 import openDialog from "../dialog-open";
+import { openConversationPopup } from "../dialog-openers";
 import { Notification, Status } from "../entities";
 import { getSelectionCancellerPointerId, getSelectorPointerId } from "../selection-tracker";
 import Flow from "./flow";
@@ -253,15 +254,15 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private readonly _tootClickListener = (ev: CustomEvent) => {
-    if (DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
-      new Windows.UI.Popups.MessageDialog((ev.detail.data as Status).content).showAsync();
+    if (this._states.user && DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
+      openConversationPopup(this._states.user, ev.detail.data);
     }
   }
 
   private readonly _notiClickListener = (ev: CustomEvent) => {
-    if (DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
+    if (this._states.user && DeumeuusScreen._hasNoSelection(ev.detail.pointerId)) {
       if ((ev.target as NotificationBox).data!.type === "mention") {
-        new Windows.UI.Popups.MessageDialog((ev.detail.data as Notification).status!.content).showAsync();
+        openConversationPopup(this._states.user, (ev.detail.data as Notification).status!);
       }
     }
   }
