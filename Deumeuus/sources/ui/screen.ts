@@ -11,15 +11,6 @@ import NotificationBox from "./notificationbox";
 import TootBox from "./tootbox";
 import { Writer } from "./writer";
 
-/*
- * TODO:
- * Merge menu bar with the title bar
- * https://docs.microsoft.com/en-us/windows/uwp/design/shell/title-bar
- *
- * If the title bar is absent (e.g. in mobile, or possibly in tablet mode),
- * show the menu bar in the bottom
- */
-
 interface DeumeuusScreenInternalStates {
   user: MastodonAPI | null;
   stream: EventSource | null;
