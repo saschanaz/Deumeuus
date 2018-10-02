@@ -227,6 +227,16 @@ export class DeumeuusScreen extends HTMLElement {
         child.content!.classList.add("deleted");
       }
     }) as EventListener);
+    source.addEventListener("error", () => {
+      // Insert holes when stream disconnects
+      const { elements } = this._states;
+      if (elements.homeTimeline.children.length) {
+        elements.homeTimeline.children[0].classList.add("hashole");
+      }
+      if (elements.notifications.children.length) {
+        elements.notifications.children[0].classList.add("hashole");
+      }
+    });
   }
 
   private _disconnectStream() {
