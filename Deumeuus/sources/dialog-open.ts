@@ -22,6 +22,14 @@ export default function openDialog({ nodes, classes }: { nodes: Node[], classes?
       (previousFocus as HTMLElement).focus();
     }
   });
+  dialog.addEventListener("click", ev => {
+    const rect = dialog.getBoundingClientRect();
+    const isInDialog = (rect.top <= ev.clientY) && (ev.clientY <= rect.top + rect.height)
+      && (rect.left <= ev.clientX) && (ev.clientX <= rect.left + rect.width);
+    if (!isInDialog) {
+      dialog.close();
+    }
+  });
   document.body.appendChild(dialog);
   dialog.showModal();
 }
