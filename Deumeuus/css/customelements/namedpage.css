@@ -1,5 +1,6 @@
 ﻿deu-namedpage {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 deu-namedpage .namedpage-titlebar {

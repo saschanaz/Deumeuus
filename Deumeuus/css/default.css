@@ -36,6 +36,10 @@ dialog {
     overflow: hidden;
 }
 
+.fillheight {
+    height: 100%;
+}
+
 .flexfill {
     overflow: hidden;
     flex: 1;
