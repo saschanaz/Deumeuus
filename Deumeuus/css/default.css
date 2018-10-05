@@ -63,6 +63,13 @@ dialog {
     bottom: 0px;
 }
 
+@media (max-height: 860px) {
+    .limitedwidth {
+        height: 817px;
+        max-height: 100%;
+    }
+}
+
 .nobackground {
     background-color: transparent;
 }
