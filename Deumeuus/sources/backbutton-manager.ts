@@ -9,7 +9,7 @@ export default function manageBackButtonViaBodyMutation() {
     if (dialogAdded) {
       const view = SystemNavigationManager.getForCurrentView();
       view.appViewBackButtonVisibility = AppViewBackButtonVisibility.visible;
-    } else if (!Array.from(document.body.children).every(isDialog)) {
+    } else if (!Array.from(document.body.children).some(isDialog)) {
       const view = SystemNavigationManager.getForCurrentView();
       view.appViewBackButtonVisibility = AppViewBackButtonVisibility.collapsed;
     }
