@@ -1,4 +1,5 @@
 import { MastodonAPI, registerApp } from "./api";
+import manageBackButtonViaBodyMutation from "./backbutton-manager";
 import { authorizeUser, getUserToken } from "./oauth2";
 import startSelectionCanceller from "./selection-canceller";
 import * as storage from "./storage";
@@ -55,6 +56,7 @@ async function main() {
   await domReady();
   startSelectionCanceller();
   runTootBoxTimeRefesher();
+  manageBackButtonViaBodyMutation();
   document.head.appendChild(styleController.styleElement);
   styleController.applySavedOrDefaultStyle();
   document.body.appendChild(screen);
