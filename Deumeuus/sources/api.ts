@@ -4,19 +4,46 @@ import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonStreamingAPI } from "./apis/streaming";
 import { MastodonTimelinesAPI } from "./apis/timelines";
 
-function queryMapToString(queryMap: Record<string, any>) {
-  const params = new URLSearchParams();
+interface Appendable {
+  append(name: string, value: string): void;
+}
+
+function appendQueryEntries<T extends Appendable>(base: T, queryMap: Record<string, any>) {
   for (const [key, value] of Object.entries(queryMap)) {
     if (Array.isArray(value)) {
-      // Mastodon follows Rails convention
-      // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#parameter-types
-      for (const item of value) {
-        params.append(`${key}[]`, item);
+      if (value.some(item => typeof item === "object")) {
+        // Support for fields_attributes
+        // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#updating-the-current-user
+        for (const [i, item] of value.entries()) {
+          if (typeof item !== "object") {
+            throw new Error("Heterogeneously typed array is not supported");
+          }
+          for (const [k, v] of Object.entries<any>(item)) {
+            base.append(`${key}[${i}][${k}]`, v);
+          }
+        }
+      } else {
+        // Support for exclude_types
+        // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#fetching-a-users-notifications
+        for (const item of value) {
+          base.append(`${key}[]`, item);
+        }
+      }
+    } else if (typeof value === "object") {
+      // Support for source
+      // https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#updating-the-current-user
+      for (const [k, v] of Object.entries<any>(value)) {
+        base.append(`${key}[${k}]`, v);
       }
     } else {
-      params.append(key, value);
+      base.append(key, value);
     }
   }
+}
+
+function queryMapToString(queryMap: Record<string, any>) {
+  const params = new URLSearchParams();
+  appendQueryEntries(params, queryMap);
   const result = params.toString();
   if (result) {
     return `?${result}`;
@@ -26,9 +53,7 @@ function queryMapToString(queryMap: Record<string, any>) {
 
 function queryMapToFormData(queryMap: Record<string, any>) {
   const data = new FormData();
-  for (const [key, value] of Object.entries(queryMap)) {
-    data.append(key, value);
-  }
+  appendQueryEntries(data, queryMap);
   return data;
 }
 
