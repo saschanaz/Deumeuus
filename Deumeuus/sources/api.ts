@@ -1,19 +1,8 @@
+import { MastodonAccountsAPI } from "./apis/accounts";
 import { MastodonNotificationsAPI } from "./apis/notifications";
 import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonStreamingAPI } from "./apis/streaming";
 import { MastodonTimelinesAPI } from "./apis/timelines";
-import * as entities from "./entities";
-
-export interface UserCredentials extends entities.Account {
-  /** Selected preference: Default privacy of new toots */
-  privacy: boolean;
-  /** Selected preference: Mark media as sensitive by default? */
-  sensitive: boolean;
-  /** Plain - text version of the account's note */
-  note: string;
-  /** Array of profile metadata, each element has 'name' and 'value' */
-  fields: any[];
-}
 
 function queryMapToString(queryMap: Record<string, any>) {
   const params = new URLSearchParams();
@@ -72,18 +61,11 @@ export async function apiFetch<T>(
 export class MastodonAPI {
   constructor(public instanceURL: string, private userAccessToken: string) { }
 
+  accounts = new MastodonAccountsAPI(this.instanceURL, this.userAccessToken);
   notifications = new MastodonNotificationsAPI(this.instanceURL, this.userAccessToken);
   statuses = new MastodonStatusesAPI(this.instanceURL, this.userAccessToken);
   timelines = new MastodonTimelinesAPI(this.instanceURL, this.userAccessToken);
   streaming = new MastodonStreamingAPI(this.instanceURL, this.userAccessToken);
-
-  private fetch<T>(method: string, path: string, queryMap: Record<string, any> = {}) {
-    return apiFetch<T>(this.instanceURL, this.userAccessToken, method, path, queryMap);
-  }
-
-  verifyCredentials() {
-    return this.fetch("GET", "/api/v1/accounts/verify_credentials") as Promise<UserCredentials>;
-  }
 }
 
 export interface AppRegistration {

@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="sources\api.ts" />
+    <TypeScriptCompile Include="sources\apis\accounts.ts" />
     <TypeScriptCompile Include="sources\apis\common.ts" />
     <TypeScriptCompile Include="sources\apis\notifications.ts" />
     <TypeScriptCompile Include="sources\apis\statuses.ts" />

@@ -34,16 +34,16 @@ export class DeumeuusScreen extends HTMLElement {
   get user() {
     return this._states.user;
   }
-  set user(account: MastodonAPI | null) {
-    this._states.user = account;
-    this._states.elements.writer.user = account;
+  set user(user: MastodonAPI | null) {
+    this._states.user = user;
+    this._states.elements.writer.user = user;
 
-    if (account) {
-      if (account && document.body.contains(this)) {
+    if (user) {
+      if (user && document.body.contains(this)) {
         this._retrieveInitial();
       }
-      account.verifyCredentials().then(
-        user => this._states.elements.currentUserImage.src = user.avatar
+      user.accounts.verifyCredentials().then(
+        credentials => this._states.elements.currentUserImage.src = credentials.avatar
       );
     } else {
       this._states.elements.currentUserImage.src = "";
