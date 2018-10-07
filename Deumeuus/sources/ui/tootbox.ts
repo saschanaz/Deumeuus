@@ -1,9 +1,11 @@
 import { element } from "domliner";
+import { MastodonAPI } from "../api";
 import { Status } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 import { getRelativeTimeStatus } from "../relative-time";
 
 interface TootInternalStates {
+  user: MastodonAPI | null;
   data: Status | null;
   createdAt: Date | null;
   elements: {
@@ -22,11 +24,19 @@ interface TootInternalStates {
 
 export default class TootBox extends HTMLElement {
   private readonly _states: TootInternalStates = {
+    user: null,
     data: null,
     createdAt: null,
 
     elements: this._initializeDOM()
   };
+
+  get user() {
+    return this._states.user;
+  }
+  set user(user: MastodonAPI | null) {
+    this._states.user = user;
+  }
 
   get data() {
     return this._states.data;
@@ -39,7 +49,7 @@ export default class TootBox extends HTMLElement {
       return;
     }
 
-    const elements = this._states.elements;
+    const { user, elements } = this._states;
     elements.img.src = status.account.avatar;
     elements.timeAnchor.textContent = getRelativeTimeStatus(this._states.createdAt!).text;
     elements.timeAnchor.href = status.uri;
@@ -52,7 +62,7 @@ export default class TootBox extends HTMLElement {
     elements.userNameWrapper.classList.toggle("tootbox-mini", !!status.reblog);
     if (status.reblog) {
       elements.subcontentTitle.textContent = "boost";
-      elements.subcontent.appendChild(new TootBox(status.reblog));
+      elements.subcontent.appendChild(new TootBox({ data: status.reblog, user }));
     } else {
       elements.content.appendChild(preprocessHTMLAsFragment(status.content));
     }
@@ -62,9 +72,12 @@ export default class TootBox extends HTMLElement {
     return this._states.createdAt;
   }
 
-  constructor(data?: Status) {
+  constructor({ user, data }: { user?: MastodonAPI | null, data?: Status } = {}) {
     super();
 
+    if (user) {
+      this.user = user;
+    }
     if (data) {
       this.data = data;
     }

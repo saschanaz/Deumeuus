@@ -86,10 +86,10 @@ export default class ConversationViewer extends HTMLElement {
 
     const context = await user.statuses.getContext(status.id);
     for (const ancestor of context.ancestors) {
-      elements.ancestors.appendChild(new TootBox(ancestor));
+      elements.ancestors.appendChild(new TootBox({ data: ancestor, user }));
     }
     for (const descendant of context.descendants) {
-      elements.descendants.appendChild(new TootBox(descendant));
+      elements.descendants.appendChild(new TootBox({ data: descendant, user }));
     }
   }
 }

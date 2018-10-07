@@ -168,12 +168,13 @@ export class DeumeuusScreen extends HTMLElement {
   }
 
   private async _retrieveHomeTimeline(limiter?: MastodonIDLimiter) {
-    if (!this._states.user) {
+    const { user } = this._states;
+    if (!user) {
       throw new Error("No account information to retrieve toots");
     }
-    const toots = await this._states.user.timelines.home(limiter);
+    const toots = await user.timelines.home(limiter);
     toots
-      .map(toot => new Flow(new TootBox(toot)))
+      .map(toot => new Flow(new TootBox({ data: toot, user })))
       .forEach(box => this._states.elements.homeTimeline.appendChild(box));
     return toots;
   }
@@ -203,15 +204,16 @@ export class DeumeuusScreen extends HTMLElement {
 
   // TODO: process notifications
   private async _retrieveStream() {
-    if (!this._states.user) {
+    const { user } = this._states;
+    if (!user) {
       throw new Error("No account information to retrieve stream");
     }
-    const source = this._states.stream = await this._states.user.streaming.user();
+    const source = this._states.stream = await user.streaming.user();
     this._states.elements.homeTimeline.classList.add("realtime");
     this._states.elements.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox(status)));
+      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox({ data: status, user })));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
