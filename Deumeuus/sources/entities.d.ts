@@ -1,4 +1,6 @@
 ﻿export interface Account {
+  /** The ID of the account */
+  id: string;
   /** The username of the account */
   username: string;
   /** Equals username for local users, includes @domain for remote ones */
