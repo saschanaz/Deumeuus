@@ -1,5 +1,6 @@
 import { element } from "domliner";
 import { Status } from "../entities";
+import preprocessHTMLAsFragment from "../preprocess-html";
 import { getRelativeTimeStatus } from "../relative-time";
 
 interface TootInternalStates {
@@ -53,7 +54,7 @@ export default class TootBox extends HTMLElement {
       elements.subcontentTitle.textContent = "boost";
       elements.subcontent.appendChild(new TootBox(status.reblog));
     } else {
-      elements.content.appendChild(this._processContentAsFragment(status.content));
+      elements.content.appendChild(preprocessHTMLAsFragment(status.content));
     }
   }
 
@@ -127,14 +128,6 @@ export default class TootBox extends HTMLElement {
     this._states.elements.img.classList.remove("tootbox-mini");
     this._states.elements.timeAnchor.classList.remove("tootbox-mini");
     this._states.elements.userNameWrapper.classList.remove("tootbox-mini");
-  }
-
-  private _processContentAsFragment(content: string) {
-    const fragment = document.createRange().createContextualFragment(content);
-    for (const anchor of fragment.querySelectorAll("a")) {
-      anchor.classList.add("coloraccentbold", "nodecoration", "underlineonhover");
-    }
-    return fragment;
   }
 
   updateTimeText() {

@@ -107,6 +107,7 @@
     <TypeScriptCompile Include="sources\entities.d.ts" />
     <TypeScriptCompile Include="sources\iterate.ts" />
     <TypeScriptCompile Include="sources\oauth2.ts" />
+    <TypeScriptCompile Include="sources\preprocess-html.ts" />
     <TypeScriptCompile Include="sources\relative-time.ts" />
     <TypeScriptCompile Include="sources\require-config.ts" />
     <TypeScriptCompile Include="sources\main.ts" />
