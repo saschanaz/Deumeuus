@@ -1,4 +1,5 @@
-﻿@import "customelements/convo.css";
+﻿@import "customelements/accountdetails.css";
+@import "customelements/convo.css";
 @import "customelements/flow.css";
 @import "customelements/namedpage.css";
 @import "customelements/notibox.css";
@@ -16,6 +17,12 @@ dialog {
     color: inherit;
     padding: 0;
     border: none;
+}
+
+.buttoninherit {
+    border: none;
+    color: inherit;
+    font: inherit;
 }
 
 .clickable:hover:not(:disabled) {
@@ -43,6 +50,10 @@ dialog {
 .flexfill {
     overflow: hidden;
     flex: 1;
+}
+
+.inherittextalign {
+    text-align: inherit;
 }
 
 .invisible {

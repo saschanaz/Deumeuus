@@ -1,8 +1,10 @@
 import { element } from "domliner";
 import { MastodonAPI } from "../api";
+import openDialog from "../dialog-open";
 import { Status } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 import { getRelativeTimeStatus } from "../relative-time";
+import AccountDetailsView from "./account-details";
 
 interface TootInternalStates {
   user: MastodonAPI | null;
@@ -44,8 +46,8 @@ export default class TootBox extends HTMLElement {
   set data(status: Status | null) {
     this._states.data = status;
     this._states.createdAt = status && new Date(status.created_at);
+    this._clearDOM();
     if (!status) {
-      this._clearDOM();
       return;
     }
 
@@ -87,7 +89,20 @@ export default class TootBox extends HTMLElement {
     const elements = {} as TootInternalStates["elements"];
     this.appendChild(element("div", { class: "flexfill" }, [
       element("div", { class: "tootbox-usercontent" }, [
-        elements.img = element("img", { class: "tootbox-userimage clickable" }),
+        elements.img = element("img", {
+          class: "tootbox-userimage clickable",
+          ".onclick": () => {
+            if (this._states.data && this._states.user) {
+              openDialog({
+                nodes: [new AccountDetailsView({
+                  user: this._states.user,
+                  account: this._states.data.account
+                })],
+                classes: ["limitedwidth"]
+              });
+            }
+          }
+        }),
         element("div", { class: "flexfill" }, [
           element("div", { class: "tootbox-topwrapper" }, [
             elements.userNameWrapper = element("div", { class: `tootbox-usernamewrapper` }, [

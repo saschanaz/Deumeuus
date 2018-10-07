@@ -72,7 +72,6 @@ export function applyStyle(style: AppStyle) {
     --accent-color-faint: ${style.accentColorFaint};
 }`);
   controllableSheet.insertRule(`
-.userinformationslot-followbutton-connected,
 .userprofilepage-scrollablemenubuttons > *:hover,
 .userprofilepage-scrollablemenubuttons > *:disabled
 { background-color: ${style.accentColor} }`);
