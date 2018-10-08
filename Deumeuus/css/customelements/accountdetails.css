@@ -24,12 +24,24 @@ deu-accountdetails .followbutton-disconnected {
     background-color: #555;
 }
 
-deu-accountdetails .items > * {
-    padding: 10px 5%;
-    background-color: rgba(128, 128, 128, 0.1);
+deu-accountdetails .items {
     display: flex;
-    align-items: center;
-    overflow: hidden;
+    flex-direction: column;
+}
+
+    deu-accountdetails .items > * {
+        margin: 10px 5%;
+        padding: 10px 5%;
+        background-color: rgba(128, 128, 128, 0.1);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+@media (max-width: 500px) {
+    deu-accountdetails .items > * {
+        margin: 5px 5%;
+    }
 }
 
 deu-accountdetails .itemtext {
@@ -42,17 +54,17 @@ deu-accountdetails .clickable {
     background-color: rgba(128, 128, 128, 0.3);
 }
 
-    .clickable:hover:not(:disabled) {
-        background-color: rgba(128, 128, 128, 0.5);
-    }
+.clickable:hover:not(:disabled) {
+    background-color: rgba(128, 128, 128, 0.5);
+}
 
-    .clickable:active:not(:disabled) {
-        background-color: rgba(128, 128, 128, 0.7);
-    }
+.clickable:active:not(:disabled) {
+    background-color: rgba(128, 128, 128, 0.7);
+}
 
-    .clickable:disabled {
-        color: #999;
-    }
+.clickable:disabled {
+    color: #999;
+}
 
 deu-accountdetails .hspacebetween {
     display: flex;
