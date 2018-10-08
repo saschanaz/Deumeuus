@@ -89,8 +89,13 @@ export default class AccountDetailsView extends HTMLElement {
       element("div", { class: "items contentflow fontsize110" }, [
         element("input", {
           type: "button",
-          class: "clickable buttoninherit inherittextalign contentflow-forcefullwidth palettedream",
-          value: "\ue836 사진 보기" /* picture frame */
+          class: "clickable buttoninherit inherittextalign",
+          value: "☆ See followings"
+        }),
+        element("input", {
+          type: "button",
+          class: "clickable buttoninherit inherittextalign",
+          value: "☆ See followers"
         }),
         element("div", undefined, [
           "☆ Joined",
