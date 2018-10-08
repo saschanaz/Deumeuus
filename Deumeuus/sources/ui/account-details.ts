@@ -15,9 +15,6 @@ interface AccountDetailsViewInternalStates {
     userDescriptionBox: HTMLDivElement;
     followStatusContainer: HTMLDivElement;
     followButton: HTMLInputElement;
-    locationLine: HTMLSpanElement;
-    websiteButton: HTMLButtonElement;
-    websiteLine: HTMLSpanElement;
     joinedDayLine: HTMLSpanElement;
   };
 }
