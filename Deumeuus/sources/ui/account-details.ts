@@ -55,9 +55,8 @@ export default class AccountDetailsView extends HTMLElement {
 
     const createdAt = new Date(value.created_at);
     const diffDay = Math.round((Date.now() - createdAt.valueOf()) / 1000 / 60 / 60 / 24);
-    /* TODO: what can be done to translate this? */
     elements.joinedDayLine.textContent
-      = `${createdAt.getFullYear()}-${createdAt.getMonth() + 1}-${createdAt.getDate()} (${diffDay} days passed)`;
+      = `${createdAt.getFullYear()}-${createdAt.getMonth() + 1}-${createdAt.getDate()} (${diffDay} days ago)`;
 
     if (this._states.user) {
       this._indicateUserFollowIfApplicable();
@@ -94,7 +93,7 @@ export default class AccountDetailsView extends HTMLElement {
           value: "\ue836 사진 보기" /* picture frame */
         }),
         element("div", undefined, [
-          "☆ 가입일",
+          "☆ Joined",
           elements.joinedDayLine = element("span", { class: "itemtext ellipsiswrap" })
         ])
       ])
@@ -158,7 +157,7 @@ export default class AccountDetailsView extends HTMLElement {
       this._indicateUnfollow();
     }
     elements.followStatusContainer.textContent =
-      friendship.followed_by ? "나를 팔로우 중입니다" : "나를 팔로우하지 않습니다";
+      friendship.followed_by ? "Follows you" : "Not follows you";
   }
 
   private _indicateFollow() {
@@ -182,7 +181,7 @@ export default class AccountDetailsView extends HTMLElement {
     followButton.classList.add("followbutton-connected");
     followButton.classList.remove("followbutton-disconnected");
     followButton.classList.add("opacity5");
-    followButton.value = "통신 중";
+    followButton.value = "Sending";
   }
 }
 customElements.define("deu-accountdetails", AccountDetailsView);
