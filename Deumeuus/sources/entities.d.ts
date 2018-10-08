@@ -1,4 +1,9 @@
-﻿export interface Account {
+﻿export interface Field {
+  name: string;
+  value: string;
+}
+
+export interface Account {
   /** The ID of the account */
   id: string;
   /** The username of the account */
@@ -34,7 +39,7 @@
   /** If the owner decided to switch accounts, new account is in this attribute */
   moved: string | null;
   /** Array of profile metadata field, each element has 'name' and 'value' */
-  fields: any[] | null;
+  fields: Field[] | null;
   /** Boolean to indicate that the account performs automated actions */
   bot: string | null;
 }

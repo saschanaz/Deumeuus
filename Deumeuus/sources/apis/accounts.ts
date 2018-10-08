@@ -1,5 +1,5 @@
 import { apiFetch } from "../api";
-import { Account, Relationship, Status } from "../entities";
+import { Account, Field, Relationship, Status } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
 interface UserCredentialsSource {
@@ -9,11 +9,6 @@ interface UserCredentialsSource {
   sensitive: boolean;
   /** Plain - text version of the account's note */
   note: string;
-}
-
-interface Field {
-  name: string;
-  value: string;
 }
 
 export interface UserCredentials extends Account {

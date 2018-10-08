@@ -16,6 +16,7 @@ interface AccountDetailsViewInternalStates {
     followStatusContainer: HTMLDivElement;
     followButton: HTMLInputElement;
     joinedDayLine: HTMLSpanElement;
+    customFields: HTMLDivElement;
   };
 }
 export default class AccountDetailsView extends HTMLElement {
@@ -57,6 +58,17 @@ export default class AccountDetailsView extends HTMLElement {
     const diffDay = Math.round((Date.now() - createdAt.valueOf()) / 1000 / 60 / 60 / 24);
     elements.joinedDayLine.textContent
       = `${createdAt.getFullYear()}-${createdAt.getMonth() + 1}-${createdAt.getDate()} (${diffDay} days ago)`;
+
+    if (value.fields) {
+      for (const field of value.fields) {
+        elements.customFields.appendChild(
+          element("div", undefined, [
+            `☆ ${field.name}`,
+            element("span", { class: "itemtext ellipsiswrap" }, [preprocessHTMLAsFragment(field.value)])
+          ])
+        );
+      }
+    }
 
     if (this._states.user) {
       this._indicateUserFollowIfApplicable();
@@ -101,7 +113,8 @@ export default class AccountDetailsView extends HTMLElement {
           "☆ Joined",
           elements.joinedDayLine = element("span", { class: "itemtext ellipsiswrap" })
         ])
-      ])
+      ]),
+      elements.customFields = element("div", { class: "items contentflow fontsize110" })
     ]);
     this._listenEvents(elements);
     return elements;
@@ -114,6 +127,7 @@ export default class AccountDetailsView extends HTMLElement {
     elements.userDescriptionBox.textContent = "";
     elements.followButton.value = "";
     elements.joinedDayLine.textContent = "";
+    elements.customFields.textContent = "";
   }
 
   private _listenEvents(elements: AccountDetailsViewInternalStates["elements"]) {
