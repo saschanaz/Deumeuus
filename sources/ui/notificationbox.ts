@@ -1,8 +1,10 @@
 import { element } from "domliner";
+import { MastodonAPI } from "../api";
 import { Notification } from "../entities";
 import TootBox from "./tootbox";
 
 interface NotificationInternalStates {
+  user: MastodonAPI | null;
   data: Notification | null;
   createdAt: Date | null;
   elements: {
@@ -12,11 +14,20 @@ interface NotificationInternalStates {
 
 export default class NotificationBox extends HTMLElement {
   private readonly _states: NotificationInternalStates = {
+    user: null,
     data: null,
     createdAt: null,
 
     elements: this._initializeDOM()
   };
+
+  get user() {
+    return this._states.user;
+  }
+  set user(user: MastodonAPI | null) {
+    this._states.elements.status.user = user;
+    this._states.user = user;
+  }
 
   get data() {
     return this._states.data;
@@ -37,9 +48,12 @@ export default class NotificationBox extends HTMLElement {
     return this._states.createdAt;
   }
 
-  constructor(data?: Notification) {
+  constructor({ user, data }: { user?: MastodonAPI, data?: Notification } = {}) {
     super();
 
+    if (user) {
+      this.user = user;
+    }
     if (data) {
       this.data = data;
     }

@@ -174,22 +174,23 @@ export class DeumeuusScreen extends HTMLElement {
     }
     const toots = await user.timelines.home(limiter);
     toots
-      .map(toot => new Flow(new TootBox({ data: toot, user })))
+      .map(toot => new Flow(new TootBox({ user, data: toot })))
       .forEach(box => this._states.elements.homeTimeline.appendChild(box));
     return toots;
   }
 
   // TODO: Get full notifications instead of just mentions
   private async _retrieveNotifications(limiter?: MastodonIDLimiter) {
-    if (!this._states.user) {
+    const { user } = this._states;
+    if (!user) {
       throw new Error("No account information to retrieve notifications");
     }
-    const notifications = await this._states.user.notifications.getAll({
+    const notifications = await user.notifications.getAll({
       exclude_types: ["reblog", "favourite", "follow"],
       ...limiter || {}
     });
     notifications
-      .map(notification => new Flow(new NotificationBox(notification)))
+      .map(notification => new Flow(new NotificationBox({ user, data: notification })))
       .forEach(box => this._states.elements.notifications.appendChild(box));
     return notifications;
   }
@@ -213,12 +214,12 @@ export class DeumeuusScreen extends HTMLElement {
     this._states.elements.notifications.classList.add("realtime");
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox({ data: status, user })));
+      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox({ user, data: status })));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
       if (notification.type === "mention") {
-        this._states.elements.notifications.appendChild(new Flow(new NotificationBox(notification)));
+        this._states.elements.notifications.appendChild(new Flow(new NotificationBox({ user, data: notification })));
       }
     }) as EventListener);
     source.addEventListener("delete", ((ev: MessageEvent) => {
