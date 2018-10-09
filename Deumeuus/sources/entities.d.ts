@@ -85,6 +85,17 @@ export interface Context {
   descendants: Status[];
 }
 
+export interface Mention {
+  /** URL of user's profile (can be remote) */
+  url: string;
+  /** The username of the account */
+  username: string;
+  /** Equals `username` for local users, includes `@domain` for remote ones */
+  acct: string;
+  /** Account ID */
+  id: string;
+}
+
 export interface Notification {
   /** The notification ID */
   id: string;
@@ -158,11 +169,11 @@ export interface Status {
   spoiler_text: string;
   /** One of: `public`, `unlisted`, `private`, `direct` */
   visibility: "public" | "unlisted" | "private" | "direct";
-  /** An array of {@link Attachments} */
+  /** An array of {@link Attachment}s */
   media_attachments: any[];
-  /** An array of {@link Mentions} */
-  mentions: any[];
-  /** An array of {@link Tags} */
+  /** An array of {@link Mention}s */
+  mentions: Mention[];
+  /** An array of {@link Tag}s */
   tags: any[];
   /** {@link Application} from which the status was posted */
   application: Application;
