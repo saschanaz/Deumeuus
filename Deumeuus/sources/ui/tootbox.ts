@@ -1,10 +1,9 @@
 import { element } from "domliner";
 import { MastodonAPI } from "../api";
-import openDialog from "../dialog-open";
+import { openAccountPopup } from "../dialog-openers";
 import { Status } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 import { getRelativeTimeStatus } from "../relative-time";
-import AccountDetailsView from "./account-details";
 
 interface TootInternalStates {
   user: MastodonAPI | null;
@@ -92,14 +91,9 @@ export default class TootBox extends HTMLElement {
         elements.img = element("img", {
           class: "tootbox-userimage clickable",
           ".onclick": () => {
-            if (this._states.data && this._states.user) {
-              openDialog({
-                nodes: [new AccountDetailsView({
-                  user: this._states.user,
-                  account: this._states.data.account
-                })],
-                classes: ["limitedwidth"]
-              });
+            const { data, user } = this._states;
+            if (data && user) {
+              openAccountPopup(user, data.account);
             }
           }
         }),
@@ -141,6 +135,20 @@ export default class TootBox extends HTMLElement {
         }));
       }
     }) as EventListener);
+    this.addEventListener("deu-mentionclick-internal", (async (ev: CustomEvent) => {
+      ev.stopImmediatePropagation();
+      const { user, data } = this._states;
+      if (!user || !data) {
+        return;
+      }
+      const mention = data.mentions.find(m => m.url === ev.detail.href);
+      if (mention) {
+        const result = await user.accounts.get(mention.id);
+        openAccountPopup(user, result);
+      } else {
+        new Windows.UI.Popups.MessageDialog("Not found").showAsync();
+      }
+    }) as any);
     return elements;
   }
 
