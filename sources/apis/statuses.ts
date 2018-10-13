@@ -1,5 +1,5 @@
-import { apiFetch } from "../api";
-import { Card, Context, Status } from "../entities";
+import { apiFetch, CursorsMixin } from "../api";
+import { Account, Card, Context, Status } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
 export interface MastodonStatusPostParameters {
@@ -27,7 +27,7 @@ export class MastodonStatusesAPI {
   }
 
   get(id: string) {
-    return this._fetch<Status>("GET", `/api/v1/statuses/${id}`);
+    return this._fetch<Status & CursorsMixin>("GET", `/api/v1/statuses/${id}`);
   }
 
   context(id: string) {
@@ -38,12 +38,12 @@ export class MastodonStatusesAPI {
     return this._fetch<Card>("GET", `/api/v1/statuses/${id}/card`);
   }
 
-    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/reblogged_by`, limiter);
   rebloggedBy(id: string, limiter?: MastodonIDLimiter) {
+    return this._fetch<Account[] & CursorsMixin>("GET", `/api/v1/statuses/${id}/reblogged_by`, limiter);
   }
 
-    return this._fetch<Status>("GET", `/api/v1/statuses/${id}/favourited_by`, limiter);
   favouritedBy(id: string, limiter?: MastodonIDLimiter) {
+    return this._fetch<Account[] & CursorsMixin>("GET", `/api/v1/statuses/${id}/favourited_by`, limiter);
   }
 
   post(params: MastodonStatusPostParameters) {

@@ -1,8 +1,18 @@
+import * as li from "li";
 import { MastodonAccountsAPI } from "./apis/accounts";
 import { MastodonNotificationsAPI } from "./apis/notifications";
 import { MastodonStatusesAPI } from "./apis/statuses";
 import { MastodonStreamingAPI } from "./apis/streaming";
 import { MastodonTimelinesAPI } from "./apis/timelines";
+
+export interface CursorsMixin {
+  cursors: {
+    /** max_id to load older items */
+    older: string;
+    /** since_id to load newer items */
+    newer: string;
+  };
+}
 
 interface Appendable {
   append(name: string, value: string): void;
@@ -64,9 +74,9 @@ export async function apiFetch<T>(
   path: string,
   queryMap: Record<string, any> = {}
 ) {
-  const remote = new URL(`${path}${method === "GET" ? queryMapToString(queryMap) : ""}`, instance).toString();
+  const remote = new URL(`${path}${method === "GET" ? queryMapToString(queryMap) : ""}`, instance);
   const body = method !== "GET" ? queryMapToFormData(queryMap) : null;
-  const response = await fetch(remote, {
+  const response = await fetch(remote.toString(), {
     method,
     headers: {
       Authorization: `Bearer ${accessToken}`
@@ -78,9 +88,36 @@ export async function apiFetch<T>(
   }
   const data = await response.json();
   if (response.ok) {
+    if (response.headers.has("Link")) {
+      data.cursors = linkToCursors(remote, response.headers.get("Link")!);
+    }
     return data as T;
   }
   throw new Error((data && data.error) ? `API error: ${data.error}` : "Unknown API error");
+}
+
+function linkToCursors(remote: URL, link: string) {
+  const parsed = li.parse(link);
+  const next = new URL(parsed.next);
+  const prev = new URL(parsed.prev);
+  const originPath = remote.origin + remote.pathname;
+  if (next.origin + next.pathname !== originPath) {
+    throw new Error("`next` field from Link header unexpectedly includes different path.");
+  }
+  if (!next.searchParams.has("max_id")) {
+    throw new Error("`next` field from Link header unexpectedly lacks `max_id`.");
+  }
+  if (prev.origin + prev.pathname !== originPath) {
+    throw new Error("`prev` field from Link header unexpectedly includes different path.");
+  }
+  if (!prev.searchParams.has("since_id")) {
+    throw new Error("`prev` field from Link header unexpectedly lacks `since_id`.");
+  }
+
+  return {
+    older: next.searchParams.get("max_id"),
+    newer: prev.searchParams.get("since_id")
+  };
 }
 
 export class MastodonAPI {

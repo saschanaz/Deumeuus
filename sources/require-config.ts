@@ -11,6 +11,9 @@ var require = {
     "event-source-polyfill": [
       "node_modules/event-source-polyfill/src/eventsource.min"
     ],
+    li: [
+      "node_modules/li/lib/index"
+    ],
     localforage: [
       "node_modules/localforage/dist/localforage.min"
     ],

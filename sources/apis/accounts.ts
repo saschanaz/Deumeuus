@@ -1,4 +1,4 @@
-import { apiFetch } from "../api";
+import { apiFetch, CursorsMixin } from "../api";
 import { Account, Field, Relationship, Status } from "../entities";
 import { MastodonIDLimiter } from "./common";
 
@@ -88,15 +88,15 @@ export class MastodonAccountsAPI {
   }
 
   followers(id: string, limiter?: MastodonIDLimiter) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/followers`, limiter) as Promise<Account[]>;
+    return this._fetch("GET", `/api/v1/accounts/${id}/followers`, limiter) as Promise<Account[] & CursorsMixin>;
   }
 
   following(id: string, limiter?: MastodonIDLimiter) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/following`, limiter) as Promise<Account[]>;
+    return this._fetch("GET", `/api/v1/accounts/${id}/following`, limiter) as Promise<Account[] & CursorsMixin>;
   }
 
   statuses(id: string, params?: MastodonAccountsStatusesParameters) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/statuses`, params) as Promise<Status[]>;
+    return this._fetch("GET", `/api/v1/accounts/${id}/statuses`, params) as Promise<Status[] & CursorsMixin>;
   }
 
   follow(id: string, params?: MastodonAccountsFollowParameters) {
