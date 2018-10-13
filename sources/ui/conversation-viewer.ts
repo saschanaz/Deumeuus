@@ -84,7 +84,7 @@ export default class ConversationViewer extends HTMLElement {
       throw new Error("Needs a valid user object to fetch conversations");
     }
 
-    const context = await user.statuses.getContext(status.id);
+    const context = await user.statuses.context(status.id);
     for (const ancestor of context.ancestors) {
       elements.ancestors.appendChild(new TootBox({ data: ancestor, user }));
     }

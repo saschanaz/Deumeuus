@@ -30,20 +30,20 @@ export class MastodonStatusesAPI {
     return this._fetch<Status>("GET", `/api/v1/statuses/${id}`);
   }
 
-  getContext(id: string) {
+  context(id: string) {
     return this._fetch<Context>("GET", `/api/v1/statuses/${id}/context`);
   }
 
-  getCard(id: string) {
+  card(id: string) {
     return this._fetch<Card>("GET", `/api/v1/statuses/${id}/card`);
   }
 
-  getRebloggers(id: string, limiter?: MastodonIDLimiter) {
     return this._fetch<Status>("GET", `/api/v1/statuses/${id}/reblogged_by`, limiter);
+  rebloggedBy(id: string, limiter?: MastodonIDLimiter) {
   }
 
-  getFavouriters(id: string, limiter?: MastodonIDLimiter) {
     return this._fetch<Status>("GET", `/api/v1/statuses/${id}/favourited_by`, limiter);
+  favouritedBy(id: string, limiter?: MastodonIDLimiter) {
   }
 
   post(params: MastodonStatusPostParameters) {
