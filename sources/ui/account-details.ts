@@ -140,7 +140,7 @@ export default class AccountDetailsView extends HTMLElement {
       if (!user) {
         return;
       }
-      const accounts = await user.accounts.search({ q: ev.detail.address });
+      const accounts = await user.accounts.search({ q: ev.detail.address, limit: 1 });
       if (accounts.length && accounts[0].url === ev.detail.href) {
         openAccountPopup(user, accounts[0]);
       } else {
