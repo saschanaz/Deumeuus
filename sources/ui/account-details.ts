@@ -1,5 +1,6 @@
 import { element } from "domliner";
 import { MastodonAPI } from "../api";
+import { openAccountPopup } from "../dialog-openers";
 import { Account } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 
@@ -133,6 +134,19 @@ export default class AccountDetailsView extends HTMLElement {
   }
 
   private _listenEvents(elements: AccountDetailsViewInternalStates["elements"]) {
+    this.addEventListener("deu-mentionclick-internal", (async (ev: CustomEvent) => {
+      ev.stopImmediatePropagation();
+      const { user } = this._states;
+      if (!user) {
+        return;
+      }
+      const accounts = await user.accounts.search({ q: ev.detail.address });
+      if (accounts.length && accounts[0].url === ev.detail.href) {
+        openAccountPopup(user, accounts[0]);
+      } else {
+        new Windows.UI.Popups.MessageDialog("Not found").showAsync();
+      }
+    }) as any);
     elements.followButton.addEventListener("click", async () => {
       const { user, account } = this._states;
       if (!user || !account || this._states.followIntermediate || !elements.followButton.value) {
