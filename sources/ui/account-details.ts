@@ -98,23 +98,25 @@ export default class AccountDetailsView extends HTMLElement {
           class: "followbutton buttoninherit indicateclickable"
         })
       ]),
-      element("div", { class: "items contentflow fontsize110" }, [
-        element("input", {
-          type: "button",
-          class: "clickable buttoninherit inherittextalign",
-          value: "☆ See followings"
-        }),
-        element("input", {
-          type: "button",
-          class: "clickable buttoninherit inherittextalign",
-          value: "☆ See followers"
-        }),
-        element("div", undefined, [
-          "☆ Joined",
-          elements.joinedDayLine = element("span", { class: "itemtext ellipsiswrap" })
-        ])
-      ]),
-      elements.customFields = element("div", { class: "items contentflow fontsize110" })
+      element("div", undefined, [
+        element("div", { class: "items contentflow fontsize110" }, [
+          element("input", {
+            type: "button",
+            class: "clickable buttoninherit inherittextalign",
+            value: "☆ See followings"
+          }),
+          element("input", {
+            type: "button",
+            class: "clickable buttoninherit inherittextalign",
+            value: "☆ See followers"
+          }),
+          element("div", undefined, [
+            "☆ Joined",
+            elements.joinedDayLine = element("span", { class: "itemtext ellipsiswrap" })
+          ])
+        ]),
+        elements.customFields = element("div", { class: "items contentflow fontsize110" })
+      ])
     ]);
     this._listenEvents(elements);
     return elements;
