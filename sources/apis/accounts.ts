@@ -80,62 +80,62 @@ export class MastodonAccountsAPI {
   }
 
   verifyCredentials() {
-    return this._fetch("GET", "/api/v1/accounts/verify_credentials") as Promise<UserCredentials>;
+    return this._fetch<UserCredentials>("GET", "/api/v1/accounts/verify_credentials");
   }
 
   updateCredentials(params?: MastodonAccountsUpdateCredentialsParameters) {
-    return this._fetch("PATCH", "/api/v1/accounts/update_credentials", params) as Promise<Account>;
+    return this._fetch<Account>("PATCH", "/api/v1/accounts/update_credentials", params);
   }
 
   followers(id: string, limiter?: MastodonIDLimiter) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/followers`, limiter) as Promise<Account[] & CursorsMixin>;
+    return this._fetch<Account[] & CursorsMixin>("GET", `/api/v1/accounts/${id}/followers`, limiter);
   }
 
   following(id: string, limiter?: MastodonIDLimiter) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/following`, limiter) as Promise<Account[] & CursorsMixin>;
+    return this._fetch<Account[] & CursorsMixin>("GET", `/api/v1/accounts/${id}/following`, limiter);
   }
 
   statuses(id: string, params?: MastodonAccountsStatusesParameters) {
-    return this._fetch("GET", `/api/v1/accounts/${id}/statuses`, params) as Promise<Status[] & CursorsMixin>;
+    return this._fetch<Status[] & CursorsMixin>("GET", `/api/v1/accounts/${id}/statuses`, params);
   }
 
   follow(id: string, params?: MastodonAccountsFollowParameters) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/follow`, params) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/follow`, params);
   }
 
   unfollow(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/unfollow`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/unfollow`);
   }
 
   block(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/block`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/block`);
   }
 
   unblock(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/unblock`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/unblock`);
   }
 
   mute(id: string, params?: MastodonAccountsMuteParameters) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/mute`, params) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/mute`, params);
   }
 
   unmute(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/unmute`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/unmute`);
   }
 
   pin(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/pin`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/pin`);
   }
 
   unpin(id: string) {
-    return this._fetch("POST", `/api/v1/accounts/${id}/unpin`) as Promise<Relationship>;
+    return this._fetch<Relationship>("POST", `/api/v1/accounts/${id}/unpin`);
   }
 
   relationships(params: MastodonAccountsRelationshipsParameters) {
-    return this._fetch("GET", `/api/v1/accounts/relationships`, params) as Promise<Relationship[]>;
+    return this._fetch<Relationship[]>("GET", `/api/v1/accounts/relationships`, params);
   }
 
   search(params: MastodonAccountsSearchParameters) {
-    return this._fetch("GET", `/api/v1/accounts/search`, params) as Promise<Account[]>;
+    return this._fetch<Account[]>("GET", `/api/v1/accounts/search`, params);
   }
 }
