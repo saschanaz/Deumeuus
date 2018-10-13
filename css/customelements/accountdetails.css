@@ -1,4 +1,14 @@
-﻿deu-accountdetails .shortstats {
+﻿deu-accountdetails > * {
+    margin: 20px 5%;
+}
+
+@media (max-width: 500px) {
+    deu-accountdetails > * {
+        margin: 10px 5%;
+    }
+}
+
+deu-accountdetails .shortstats {
     margin-top: 0.5em;
     text-align: center;
     /*margin-top: 0.1em;
