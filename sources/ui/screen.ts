@@ -1,5 +1,4 @@
 import { element } from "domliner";
-import ScrollAgnosticTimeline, { BeforeAutoRemoveEvent } from "scroll-agnostic-timeline";
 import { MastodonAPI } from "../api";
 import { MastodonIDLimiter } from "../apis/common";
 import openDialog from "../dialog-open";
@@ -8,6 +7,7 @@ import { Notification, Status } from "../entities";
 import { getSelectionCancellerPointerId, getSelectorPointerId } from "../selection-tracker";
 import Flow from "./flow";
 import NotificationBox from "./notificationbox";
+import RemoteList from "./remotelist";
 import TootBox from "./tootbox";
 import { Writer } from "./writer";
 
@@ -17,8 +17,8 @@ interface DeumeuusScreenInternalStates {
 
   elements: {
     currentUserImage: HTMLImageElement;
-    homeTimeline: ScrollAgnosticTimeline<Flow<TootBox>>;
-    notifications: ScrollAgnosticTimeline<Flow<NotificationBox>>;
+    homeTimeline: RemoteList<TootBox>;
+    notifications: RemoteList<NotificationBox>;
     writerDialog: HTMLDialogElement;
     writer: Writer;
   };
@@ -52,8 +52,8 @@ export class DeumeuusScreen extends HTMLElement {
 
   private _initializeDOM() {
     const elements = {} as DeumeuusScreenInternalStates["elements"];
-    const timeline = elements.homeTimeline = new ScrollAgnosticTimeline();
-    const notifications = elements.notifications = new ScrollAgnosticTimeline();
+    const timeline = elements.homeTimeline = new RemoteList();
+    const notifications = elements.notifications = new RemoteList();
     timeline.max = notifications.max = 100;
     timeline.compare = notifications.compare = (
       x: Flow<TootBox | NotificationBox>,
@@ -66,13 +66,8 @@ export class DeumeuusScreen extends HTMLElement {
       return y.content!.data!.id.localeCompare(x.content!.data!.id);
     };
     timeline.identify = x => x.content!.data!.id;
-    timeline.addEventListener("click", ev => this._loadTimelineHandler(ev, timeline, this._retrieveHomeTimeline));
-    timeline.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
-    notifications.addEventListener(
-      "click",
-      ev => this._loadTimelineHandler(ev, notifications, this._retrieveNotifications)
-    );
-    notifications.addEventListener("beforeautoremove", ev => this._beforeAutoRemoveHandler(ev as any));
+    timeline.load = limiter => this._retrieveHomeTimeline(limiter);
+    notifications.load = limiter => this._retrieveNotifications(limiter);
 
     element(this, undefined, [
       element("div", { class: "screen-menubar" }, [
@@ -112,59 +107,19 @@ export class DeumeuusScreen extends HTMLElement {
     });
   }
 
-  private async _loadTimelineHandler(
-    ev: MouseEvent,
-    timeline: ScrollAgnosticTimeline<any>,
-    loader: (limiter: MastodonIDLimiter) => Promise<any[]>
-  ) {
-    if (ev.target instanceof Element) {
-      if (ev.target.classList.contains("flow-hole")) {
-        const parent = ev.target.parentElement! as Flow<any>;
-        const limit = 20;
-        if (!ev.target.previousElementSibling) {
-          const limiter: MastodonIDLimiter = {
-            limit,
-            since_id: parent.content!.data!.id
-          };
-          if (parent.previousElementSibling instanceof Flow) {
-            limiter.max_id = parent.previousElementSibling.content.data.id;
-          }
-          const toots = await loader.call(this, limiter);
-          if (toots.length < limit) {
-            parent.removeAttribute("hashole");
-          }
-        } else if (!ev.target.nextElementSibling) {
-          // last-item only thing, so only max_id
-          const toots = await loader.call(this, {
-            limit,
-            max_id: parent.content!.data!.id
-          });
-          timeline.classList.toggle("no-procedings", toots.length < limit);
-        }
-      }
-    }
-  }
-
-  private async _beforeAutoRemoveHandler(ev: BeforeAutoRemoveEvent<Flow<TootBox>>) {
-    if (ev.oldChild.nextElementSibling) {
-      ev.oldChild.nextElementSibling.setAttribute("hashole", "");
-    }
-  }
-
   private async _retrieveHomeTimeline(limiter?: MastodonIDLimiter) {
     const { user } = this._states;
     if (!user) {
       throw new Error("No account information to retrieve toots");
     }
     const toots = await user.timelines.home(limiter);
-    toots
+    return toots
       .map(toot => {
         const flow = new Flow(new TootBox({ user, data: toot }));
         flow.content!.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
         return flow;
       })
-      .forEach(box => this._states.elements.homeTimeline.appendChild(box));
-    return toots;
+      .map(box => this._states.elements.homeTimeline.add(box));
   }
 
   // TODO: Get full notifications instead of just mentions
@@ -177,14 +132,13 @@ export class DeumeuusScreen extends HTMLElement {
       exclude_types: ["reblog", "favourite", "follow"],
       ...limiter || {}
     });
-    notifications
+    return notifications
       .map(notification => {
         const flow = new Flow(new NotificationBox({ user, data: notification }));
         flow.content!.addEventListener("deu-backdropclick", this._notiClickListener as EventListener);
         return flow;
       })
-      .forEach(box => this._states.elements.notifications.appendChild(box));
-    return notifications;
+      .map(box => this._states.elements.notifications.add(box));
   }
 
   private async _retrieveInitial() {
@@ -202,16 +156,17 @@ export class DeumeuusScreen extends HTMLElement {
       throw new Error("No account information to retrieve stream");
     }
     const source = this._states.stream = await user.streaming.user();
-    this._states.elements.homeTimeline.classList.add("realtime");
-    this._states.elements.notifications.classList.add("realtime");
+    this._states.elements.homeTimeline.realtime
+      = this._states.elements.notifications.realtime
+      = true;
     source.addEventListener("update", ((ev: MessageEvent) => {
       const status = JSON.parse(ev.data) as Status;
-      this._states.elements.homeTimeline.appendChild(new Flow(new TootBox({ user, data: status })));
+      this._states.elements.homeTimeline.add(new Flow(new TootBox({ user, data: status })));
     }) as EventListener);
     source.addEventListener("notification", ((ev: MessageEvent) => {
       const notification = JSON.parse(ev.data) as Notification;
       if (notification.type === "mention") {
-        this._states.elements.notifications.appendChild(new Flow(new NotificationBox({ user, data: notification })));
+        this._states.elements.notifications.add(new Flow(new NotificationBox({ user, data: notification })));
       }
     }) as EventListener);
     source.addEventListener("delete", ((ev: MessageEvent) => {
@@ -225,11 +180,11 @@ export class DeumeuusScreen extends HTMLElement {
     source.addEventListener("error", () => {
       // Insert holes when stream disconnects
       const { elements } = this._states;
-      if (elements.homeTimeline.children.length) {
-        elements.homeTimeline.children[0].classList.add("hashole");
+      if (elements.homeTimeline.items.length) {
+        elements.homeTimeline.items[0].classList.add("hashole");
       }
-      if (elements.notifications.children.length) {
-        elements.notifications.children[0].classList.add("hashole");
+      if (elements.notifications.items.length) {
+        elements.notifications.items[0].classList.add("hashole");
       }
     });
   }
@@ -274,5 +229,4 @@ export class DeumeuusScreen extends HTMLElement {
     this._disconnectStream();
   }
 }
-customElements.define("sa-timeline", ScrollAgnosticTimeline);
 customElements.define("deu-screen", DeumeuusScreen);
