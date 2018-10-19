@@ -102,22 +102,6 @@ export class DeumeuusScreen extends HTMLElement {
     ]);
 
     elements.writer = new Writer();
-
-    const callback = (mutations: MutationRecord[]) => {
-      for (const mutation of mutations) {
-        for (const addedNode of mutation.addedNodes) {
-          if (addedNode instanceof Flow) {
-            if (addedNode.content instanceof TootBox) {
-              addedNode.content.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
-            } else if (addedNode.content instanceof NotificationBox) {
-              addedNode.content.addEventListener("deu-backdropclick", this._notiClickListener as EventListener);
-            }
-          }
-        }
-      }
-    };
-    new MutationObserver(callback).observe(timeline as Node, { childList: true });
-    new MutationObserver(callback).observe(notifications as Node, { childList: true });
     return elements;
   }
 
@@ -174,7 +158,11 @@ export class DeumeuusScreen extends HTMLElement {
     }
     const toots = await user.timelines.home(limiter);
     toots
-      .map(toot => new Flow(new TootBox({ user, data: toot })))
+      .map(toot => {
+        const flow = new Flow(new TootBox({ user, data: toot }));
+        flow.content!.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
+        return flow;
+      })
       .forEach(box => this._states.elements.homeTimeline.appendChild(box));
     return toots;
   }
@@ -190,7 +178,11 @@ export class DeumeuusScreen extends HTMLElement {
       ...limiter || {}
     });
     notifications
-      .map(notification => new Flow(new NotificationBox({ user, data: notification })))
+      .map(notification => {
+        const flow = new Flow(new NotificationBox({ user, data: notification }));
+        flow.content!.addEventListener("deu-backdropclick", this._notiClickListener as EventListener);
+        return flow;
+      })
       .forEach(box => this._states.elements.notifications.appendChild(box));
     return notifications;
   }
