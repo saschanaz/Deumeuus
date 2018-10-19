@@ -1,5 +1,6 @@
 ﻿sa-timeline {
     display: block;
+    overflow-y: auto;
 }
 
     sa-timeline.realtime deu-flow:not([hashole]):first-child .flow-hole:first-child,

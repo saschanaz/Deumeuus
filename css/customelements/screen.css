@@ -24,7 +24,6 @@
         deu-screen .screen-columns > * {
             height: 100%;
             max-width: 800px;
-            overflow: auto;
             flex: 1;
         }
 
