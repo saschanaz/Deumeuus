@@ -193,8 +193,9 @@ export class DeumeuusScreen extends HTMLElement {
     if (this._states.stream) {
       this._states.stream.close();
       this._states.stream = null;
-      this._states.elements.homeTimeline.classList.remove("realtime");
-      this._states.elements.notifications.classList.remove("realtime");
+      this._states.elements.homeTimeline.realtime
+        = this._states.elements.notifications.realtime
+        = false;
     }
   }
 
