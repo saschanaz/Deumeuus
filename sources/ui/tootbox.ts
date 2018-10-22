@@ -86,7 +86,7 @@ export default class TootBox extends HTMLElement {
 
   private _initializeDOM() {
     const elements = {} as TootInternalStates["elements"];
-    this.appendChild(element("div", { class: "flexfill" }, [
+    element(this, undefined, [
       element("div", { class: "tootbox-usercontent" }, [
         elements.img = element("img", {
           class: "tootbox-userimage clickable",
@@ -120,7 +120,7 @@ export default class TootBox extends HTMLElement {
         ]),
         elements.subcontent = element("div")
       ])
-    ]));
+    ]);
 
     this.addEventListener("click", ((ev: PointerEvent) => {
       const target = ev.target as HTMLElement;

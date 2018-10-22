@@ -1,8 +1,8 @@
 ﻿deu-tootbox {
+    display: block;
     padding: 10px 5%;
     animation-name: entrance;
     animation-duration: .3s;
-    display: flex;
 }
 
     deu-tootbox:hover { /* TODO: move :hover, .selected to flowitemcontainer */
