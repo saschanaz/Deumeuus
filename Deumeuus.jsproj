@@ -106,6 +106,7 @@
     <TypeScriptCompile Include="sources\apis\streaming.ts" />
     <TypeScriptCompile Include="sources\apis\timelines.ts" />
     <TypeScriptCompile Include="sources\backbutton-manager.ts" />
+    <TypeScriptCompile Include="sources\bigint-compare.ts" />
     <TypeScriptCompile Include="sources\dialog-polyfill-auto.ts" />
     <TypeScriptCompile Include="sources\dialog-open.ts" />
     <TypeScriptCompile Include="sources\entities.d.ts" />

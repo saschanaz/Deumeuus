@@ -1,6 +1,7 @@
 import { element } from "domliner";
 import { MastodonAPI } from "../api";
 import { MastodonIDLimiter } from "../apis/common";
+import compareBigInt from "../bigint-compare";
 import openDialog from "../dialog-open";
 import { openConversationPopup } from "../dialog-openers";
 import { Notification, Status } from "../entities";
@@ -59,11 +60,7 @@ export class DeumeuusScreen extends HTMLElement {
       x: Flow<TootBox | NotificationBox>,
       y: Flow<TootBox | NotificationBox>
     ) => {
-      const lengthDiff = y.content!.data!.id.length - x.content!.data!.id.length;
-      if (lengthDiff) {
-        return lengthDiff;
-      }
-      return y.content!.data!.id.localeCompare(x.content!.data!.id);
+      return compareBigInt(y.content!.data!.id, x.content!.data!.id);
     };
     timeline.identify = x => x.content!.data!.id;
     timeline.load = limiter => this._retrieveHomeTimeline(limiter);
