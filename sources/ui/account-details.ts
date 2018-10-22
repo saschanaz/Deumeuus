@@ -1,8 +1,11 @@
 import { element } from "domliner";
 import { MastodonAPI } from "../api";
+import openDialog from "../dialog-open";
 import { openAccountPopup } from "../dialog-openers";
 import { Account } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
+import AccountBox from "./accountbox";
+import NamedPage from "./namedpage";
 
 interface AccountDetailsViewInternalStates {
   user: MastodonAPI | null;
@@ -104,7 +107,13 @@ export default class AccountDetailsView extends HTMLElement {
           element("input", {
             type: "button",
             class: "clickable buttoninherit inherittextalign",
-            value: "☆ See followings"
+            value: "☆ See followings",
+            ".onclick": () => {
+              const { user, account } = this._states;
+              if (user && account) {
+                openFollowingsList(user, account.id);
+              }
+            }
           }),
           element("input", {
             type: "button",
@@ -220,3 +229,19 @@ export default class AccountDetailsView extends HTMLElement {
   }
 }
 customElements.define("deu-accountdetails", AccountDetailsView);
+
+async function openFollowingsList(user: MastodonAPI, id: string) {
+  const followings = await user.accounts.following(id);
+  const page = element("div", undefined, followings.map(
+    following => new AccountBox({ user, account: following })
+  ));
+  openDialog({
+    nodes: [
+      element(new NamedPage({
+        pageTitle: "Followers",
+        content: page
+      }), { class: "fillheight" })
+    ],
+    classes: ["limitedwidth"]
+  });
+}
