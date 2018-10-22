@@ -96,7 +96,9 @@ export default class RemoteList<T extends HTMLElement> extends HTMLElement {
         limit,
         since_id: id
       };
-      if (parent.previousElementSibling instanceof Flow) {
+      if (parent.dataset.older) {
+        limiter.max_id = parent.dataset.older;
+      } else if (parent.previousElementSibling instanceof Flow) {
         limiter.max_id = this.identify(parent.previousElementSibling).toString();
       }
       const toots = await load(limiter);

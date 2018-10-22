@@ -1,11 +1,14 @@
 import { element } from "domliner";
-import { MastodonAPI } from "../api";
+import { CursorsMixin, MastodonAPI } from "../api";
+import compareBigInt from "../bigint-compare";
 import openDialog from "../dialog-open";
 import { openAccountPopup } from "../dialog-openers";
 import { Account } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 import AccountBox from "./accountbox";
+import Flow from "./flow";
 import NamedPage from "./namedpage";
+import RemoteList from "./remotelist";
 
 interface AccountDetailsViewInternalStates {
   user: MastodonAPI | null;
@@ -232,9 +235,16 @@ customElements.define("deu-accountdetails", AccountDetailsView);
 
 async function openFollowingsList(user: MastodonAPI, id: string) {
   const followings = await user.accounts.following(id);
-  const page = element("div", undefined, followings.map(
-    following => new AccountBox({ user, account: following })
-  ));
+  const page = wrapAccounts(user, followings);
+  const remoteList = new RemoteList();
+  remoteList.identify = x => x.content!.dataset.newer!;
+  remoteList.compare = (x, y) => compareBigInt(y.content!.dataset.newer!, x.content!.dataset.newer!);
+  remoteList.load = async limiter => {
+    const fls = await user.accounts.following(id, limiter);
+    return [new Flow(wrapAccounts(user, fls))];
+  };
+  remoteList.appendChild(page);
+
   openDialog({
     nodes: [
       element(new NamedPage({
@@ -245,3 +255,18 @@ async function openFollowingsList(user: MastodonAPI, id: string) {
     classes: ["limitedwidth"]
   });
 }
+
+function wrapAccounts(user: MastodonAPI, accounts: Account[] & CursorsMixin) {
+  const page = element("div", undefined, accounts.map(
+    account => new AccountBox({ user, account })
+  ));
+  page.dataset.newer = accounts.cursors.newer;
+  if (accounts.cursors.older) {
+    page.dataset.older = accounts.cursors.older;
+  }
+  return page;
+}
+
+// function openFollowingsList(user: MastodonAPI) {
+
+// }
