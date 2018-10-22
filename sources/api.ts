@@ -8,7 +8,7 @@ import { MastodonTimelinesAPI } from "./apis/timelines";
 export interface CursorsMixin {
   cursors: {
     /** max_id to load older items */
-    older: string;
+    older: string | null;
     /** since_id to load newer items */
     newer: string;
   };
@@ -99,7 +99,7 @@ export async function apiFetch<T>(
 function linkToCursors(remote: URL, link: string) {
   const parsed = li.parse(link);
   const next = "next" in parsed ? new URL(parsed.next) : null;
-  const prev = "prev" in parsed ? new URL(parsed.prev) : null;
+  const prev = new URL(parsed.prev);
   const originPath = remote.origin + remote.pathname;
   if (next) {
     if (next.origin + next.pathname !== originPath) {
@@ -109,18 +109,16 @@ function linkToCursors(remote: URL, link: string) {
       throw new Error("`next` field from Link header unexpectedly lacks `max_id`.");
     }
   }
-  if (prev) {
-    if (prev.origin + prev.pathname !== originPath) {
-      throw new Error("`prev` field from Link header unexpectedly includes different path.");
-    }
-    if (!prev.searchParams.has("since_id")) {
-      throw new Error("`prev` field from Link header unexpectedly lacks `since_id`.");
-    }
+  if (prev.origin + prev.pathname !== originPath) {
+    throw new Error("`prev` field from Link header unexpectedly includes different path.");
+  }
+  if (!prev.searchParams.has("since_id")) {
+    throw new Error("`prev` field from Link header unexpectedly lacks `since_id`.");
   }
 
   return {
     older: next && next.searchParams.get("max_id"),
-    newer: prev && prev.searchParams.get("since_id")
+    newer: prev.searchParams.get("since_id")
   };
 }
 
