@@ -3,7 +3,7 @@ import { MastodonIDLimiter } from "../apis/common";
 import Flow from "./flow";
 
 interface RemoteListInternalStates<T extends HTMLElement> {
-  load: ((limiter: MastodonIDLimiter) => Promise<Flow<T>[]>) | null;
+  load: ((limiter: MastodonIDLimiter) => Promise<boolean>) | null;
 
   elements: {
     timeline: ScrollAgnosticTimeline<Flow<T>>
@@ -99,17 +99,17 @@ export default class RemoteList<T extends HTMLElement> extends HTMLElement {
       if (parent.previousElementSibling instanceof Flow) {
         limiter.max_id = this.identify(parent.previousElementSibling).toString();
       }
-      const toots = await load(limiter);
-      if (toots.length < limit) {
+      const moreToLoad = await load(limiter);
+      if (!moreToLoad) {
         parent.removeAttribute("hashole");
       }
     } else if (!ev.target.nextElementSibling) {
       // last-item only thing, so only max_id
-      const toots = await load({
+      const moreToLoad = await load({
         limit,
         max_id: id
       });
-      elements.timeline.classList.toggle("no-procedings", toots.length < limit);
+      elements.timeline.classList.toggle("no-procedings", !moreToLoad);
     }
   }
 }

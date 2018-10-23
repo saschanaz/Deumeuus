@@ -110,13 +110,17 @@ export class DeumeuusScreen extends HTMLElement {
       throw new Error("No account information to retrieve toots");
     }
     const toots = await user.timelines.home(limiter);
-    return toots
+    toots
       .map(toot => {
         const flow = new Flow(new TootBox({ user, data: toot }));
         flow.content!.addEventListener("deu-backdropclick", this._tootClickListener as EventListener);
         return flow;
       })
-      .map(box => this._states.elements.homeTimeline.add(box));
+      .forEach(box => this._states.elements.homeTimeline.add(box));
+    if (limiter) {
+      return toots.length === limiter.limit!;
+    }
+    return true;
   }
 
   // TODO: Get full notifications instead of just mentions
@@ -129,13 +133,17 @@ export class DeumeuusScreen extends HTMLElement {
       exclude_types: ["reblog", "favourite", "follow"],
       ...limiter || {}
     });
-    return notifications
+    notifications
       .map(notification => {
         const flow = new Flow(new NotificationBox({ user, data: notification }));
         flow.content!.addEventListener("deu-backdropclick", this._notiClickListener as EventListener);
         return flow;
       })
-      .map(box => this._states.elements.notifications.add(box));
+      .forEach(box => this._states.elements.notifications.add(box));
+    if (limiter) {
+      return notifications.length === limiter.limit!;
+    }
+    return true;
   }
 
   private async _retrieveInitial() {
