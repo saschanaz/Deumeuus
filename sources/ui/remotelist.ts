@@ -52,6 +52,13 @@ export default class RemoteList<T extends HTMLElement> extends HTMLElement {
     this._states.elements.timeline.classList.toggle("realtime", value);
   }
 
+  get noProcedings() {
+    return this._states.elements.timeline.classList.contains("no-procedings");
+  }
+  set noProcedings(value: boolean) {
+    this._states.elements.timeline.classList.toggle("no-procedings", value);
+  }
+
   get items() {
     return this._states.elements.timeline.children;
   }
