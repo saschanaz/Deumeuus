@@ -11,7 +11,7 @@ export interface CursorsMixin {
     older: string | null;
     /** since_id to load newer items */
     newer: string;
-  };
+  } | undefined;
 }
 
 interface Appendable {
