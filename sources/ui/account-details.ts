@@ -1,11 +1,14 @@
 import { element } from "domliner";
-import { MastodonAPI } from "../api";
+import { CursorsMixin, MastodonAPI } from "../api";
+import compareBigInt from "../bigint-compare";
 import openDialog from "../dialog-open";
 import { openAccountPopup } from "../dialog-openers";
 import { Account } from "../entities";
 import preprocessHTMLAsFragment from "../preprocess-html";
 import AccountBox from "./accountbox";
+import Flow from "./flow";
 import NamedPage from "./namedpage";
+import RemoteList from "./remotelist";
 
 interface AccountDetailsViewInternalStates {
   user: MastodonAPI | null;
@@ -231,17 +234,46 @@ export default class AccountDetailsView extends HTMLElement {
 customElements.define("deu-accountdetails", AccountDetailsView);
 
 async function openFollowingsList(user: MastodonAPI, id: string) {
+  const remoteList = new RemoteList();
+  remoteList.classList.add("fillheight");
+  remoteList.max = 5;
+  remoteList.identify = x => x.dataset.newer!;
+  remoteList.compare = (x, y) => compareBigInt(y.dataset.newer!, x.dataset.newer!);
+  remoteList.load = async limiter => {
+    const fls = await user.accounts.following(id, limiter);
+    if (fls.length) {
+      remoteList.add(wrapAccounts(user, fls));
+    }
+    return !!(fls.cursors && fls.cursors.older);
+  };
   const followings = await user.accounts.following(id);
-  const page = element("div", undefined, followings.map(
-    following => new AccountBox({ user, account: following })
-  ));
+  if (!followings.cursors || !followings.cursors.older) {
+    remoteList.noProcedings = true;
+  }
+  const flow = wrapAccounts(user, followings);
+  remoteList.add(flow);
+
   openDialog({
     nodes: [
       element(new NamedPage({
         pageTitle: "Followers",
-        content: page
+        content: remoteList
       }), { class: "fillheight" })
     ],
     classes: ["limitedwidth"]
   });
+}
+
+function wrapAccounts(user: MastodonAPI, accounts: Account[] & CursorsMixin) {
+  const page = element("div", undefined, accounts.map(
+    account => new AccountBox({ user, account })
+  ));
+  const flow = new Flow(page);
+  if (accounts.cursors) {
+    flow.dataset.newer = accounts.cursors.newer;
+    if (accounts.cursors.older) {
+      flow.dataset.older = accounts.cursors.older;
+    }
+  }
+  return flow;
 }
