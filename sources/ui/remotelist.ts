@@ -97,7 +97,11 @@ export default class RemoteList<T extends HTMLElement> extends HTMLElement {
         since_id: id
       };
       if (parent.previousElementSibling instanceof Flow) {
-        limiter.max_id = this.identify(parent.previousElementSibling).toString();
+        if (parent.dataset.older) {
+          limiter.max_id = parent.dataset.older;
+        } else {
+          limiter.max_id = this.identify(parent.previousElementSibling).toString();
+        }
       }
       const moreToLoad = await load(limiter);
       if (!moreToLoad) {
@@ -105,9 +109,11 @@ export default class RemoteList<T extends HTMLElement> extends HTMLElement {
       }
     } else if (!ev.target.nextElementSibling) {
       // last-item only thing, so only max_id
+      // use dataset.older for unsorted paged lists
+      const max = parent.dataset.older || id;
       const moreToLoad = await load({
         limit,
-        max_id: id
+        max_id: max
       });
       elements.timeline.classList.toggle("no-procedings", !moreToLoad);
     }
