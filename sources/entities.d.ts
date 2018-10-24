@@ -112,9 +112,9 @@ export interface Card {
 }
 
 export interface Context {
-  /** The ancestors of the status in the conversation, as a list of {@link Statuses} */
+  /** The ancestors of the status in the conversation, as a list of {@link Status}es */
   ancestors: Status[];
-  /** The descendants of the status in the conversation, as a list of {@link Statuses} */
+  /** The descendants of the status in the conversation, as a list of {@link Status}es */
   descendants: Status[];
 }
 

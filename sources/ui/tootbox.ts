@@ -57,7 +57,7 @@ export default class TootBox extends HTMLElement {
     elements.displayName.textContent = status.account.display_name;
     elements.screenName.textContent = `@${status.account.username}`;
 
-    elements.subcontentContainer.classList.toggle("invisible", !status.reblog);
+    elements.subcontentContainer.classList.toggle("invisible", !status.reblog && !status.media_attachments.length);
     elements.img.classList.toggle("tootbox-mini", !!status.reblog);
     elements.timeAnchor.classList.toggle("tootbox-mini", !!status.reblog);
     elements.userNameWrapper.classList.toggle("tootbox-mini", !!status.reblog);
@@ -66,6 +66,14 @@ export default class TootBox extends HTMLElement {
       elements.subcontent.appendChild(new TootBox({ data: status.reblog, user }));
     } else {
       elements.content.appendChild(preprocessHTMLAsFragment(status.content));
+      if (status.media_attachments.length) {
+        elements.subcontentTitle.textContent = "media";
+        element(elements.subcontent, undefined, status.media_attachments.map(attachment => {
+          const img = element("div", { class: "tootbox-media" });
+          img.style.backgroundImage = `url('${attachment.preview_url}')`;
+          return img;
+        }));
+      }
     }
   }
 
