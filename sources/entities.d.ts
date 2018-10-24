@@ -51,6 +51,39 @@ export interface Application {
   website: string | null;
 }
 
+export interface Attachment {
+  /** ID of the attachment */
+  id: string;
+  /** One of: "image", "video", "gifv", "unknown" */
+  type: "image" | "video" | "gifv" | "unknown";
+  /** URL of the locally hosted version of the image */
+  url: string;
+  /** For remote images, the remote URL of the original image */
+  remote_url: string | null;
+  /** URL of the preview image */
+  preview_url: string;
+  /** Shorter URL for the image, for insertion into text (only present on local images) */
+  text_url: string | null;
+  /** Attachment metadata */
+  meta: {
+    small?: string;
+    original?: string;
+    width?: number;
+    height?: number;
+    size?: number;
+    aspect?: number;
+    frame_rate?: number;
+    duration?: number;
+    bitrate?: number;
+    focus?: {
+      x: number;
+      y: number;
+    }
+  } | null;
+  /** A description of the image for the visually impaired (maximum 420 characters), or `null` if none provided */
+  description: string | null;
+}
+
 export interface Card {
   /** The url associated with the card */
   url: string;
@@ -170,7 +203,7 @@ export interface Status {
   /** One of: `public`, `unlisted`, `private`, `direct` */
   visibility: "public" | "unlisted" | "private" | "direct";
   /** An array of {@link Attachment}s */
-  media_attachments: any[];
+  media_attachments: Attachment[];
   /** An array of {@link Mention}s */
   mentions: Mention[];
   /** An array of {@link Tag}s */
