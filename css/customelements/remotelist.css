@@ -1,3 +1,4 @@
 ﻿deu-remotelist {
     display: flex;
+    flex-direction: column;
 }
