@@ -110,18 +110,24 @@ export default class AccountDetailsView extends HTMLElement {
           element("input", {
             type: "button",
             class: "clickable buttoninherit inherittextalign",
-            value: "☆ See followings",
+            value: "☆ Follows",
             ".onclick": () => {
               const { user, account } = this._states;
               if (user && account) {
-                openFollowingsList(user, account.id);
+                openRelationsList(user, account.id, "following", "Follows");
               }
             }
           }),
           element("input", {
             type: "button",
             class: "clickable buttoninherit inherittextalign",
-            value: "☆ See followers"
+            value: "☆ Followers",
+            ".onclick": () => {
+              const { user, account } = this._states;
+              if (user && account) {
+                openRelationsList(user, account.id, "followers", "Followers");
+              }
+            }
           }),
           element("div", undefined, [
             "☆ Joined",
@@ -233,20 +239,20 @@ export default class AccountDetailsView extends HTMLElement {
 }
 customElements.define("deu-accountdetails", AccountDetailsView);
 
-async function openFollowingsList(user: MastodonAPI, id: string) {
+async function openRelationsList(user: MastodonAPI, id: string, api: "following" | "followers", pageTitle: string) {
   const remoteList = new RemoteList();
   remoteList.classList.add("fillheight");
   remoteList.max = 5;
   remoteList.identify = x => x.dataset.newer!;
   remoteList.compare = (x, y) => compareBigInt(y.dataset.newer!, x.dataset.newer!);
   remoteList.load = async limiter => {
-    const fls = await user.accounts.following(id, limiter);
+    const fls = await user.accounts[api](id, limiter);
     if (fls.length) {
       remoteList.add(wrapAccounts(user, fls));
     }
     return !!(fls.cursors && fls.cursors.older);
   };
-  const followings = await user.accounts.following(id);
+  const followings = await user.accounts[api](id);
   if (!followings.cursors || !followings.cursors.older) {
     remoteList.noProcedings = true;
   }
@@ -256,7 +262,7 @@ async function openFollowingsList(user: MastodonAPI, id: string) {
   openDialog({
     nodes: [
       element(new NamedPage({
-        pageTitle: "Followers",
+        pageTitle,
         content: remoteList
       }), { class: "fillheight" })
     ],
